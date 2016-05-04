@@ -14,14 +14,14 @@ url: "http://cxd2014.github.io" # the base hostname & protocol for your site
 permalink: /:year/:month/:day/:title/
 
 # other links
-twitter_username: wanyier
-facebook_username: wanyier
+twitter_username: wanyier2
+facebook_username: profile.php?id=100006606157322
 github_username:  Cxd2014
 email: chengxd2015@qq.com
 #weibo_username: 3115521wh
 #zhihu_username: gaohaoyang
 
-description_footer: 嵌入式成长记录
+#description_footer: 嵌入式成长记录
 
 # comments
 # two ways to comment, only choose one, and use your own short name
