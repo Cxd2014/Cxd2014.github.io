@@ -12,10 +12,6 @@ tags: git command
 {:toc}
 
 
-
-
-
-
 ### Git常用命令列表
 
 命令|解释
@@ -48,6 +44,6 @@ git reset --hard + 版本号| 回到删除的版本位置
 git reset --hard HEAD^  | 回退到上一个版本
 git reset --hard HEAD~X | 回退到上X个版本
 
-git remote add origin https://github.com/Cxd2014/Cxd2014.github.io 联一个远程库
- 
-git clone https://github.com/Cxd2014/Cxd2014.github.io  从远程库中克隆  
+
+    git remote add origin https://github.com/Cxd2014/Cxd2014.github.io 联一个远程库
+    git clone https://github.com/Cxd2014/Cxd2014.github.io  从远程库中克隆  

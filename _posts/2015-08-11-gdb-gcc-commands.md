@@ -56,16 +56,20 @@ gcc -nostdinc -I dir hello.c -o hello |不要在标准系统目录中寻找头�
 
 
 #### 编译静态链接库
+
+```shell
      gcc -c hello.c -o hello.o                        #先生成目标文件 .o 
      ar crv hello.a hello.o                           #打包为 .a 的静态链接库文件
      gcc cxd.c -o cxd -L /root/desktop/hello.a        #调用自己的静态链接库
-
+```
 
 #### 编译动态链接库
+
+```shell
     gcc -fPIC -c hello.c                             #编译成位置无关的 .o 文件
     gcc -shared hello.o -o hello.so                  #生成动态链接库
     gcc cxd.c -o cxd -L /root/desktop/hello.so       #调用自己的动态链接库
-
+```
 #### 查看程序需要哪些链接库
 
     ldd application_name

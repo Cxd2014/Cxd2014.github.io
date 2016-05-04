@@ -11,18 +11,12 @@ tags: socket select
 * content
 {:toc}
 
-
-
-
-
-
 ### select函数
 
 1. 函数原型
 
         int select(int nfds, fd_set *readfds, fd_set *writefds,
-                        fd_set *exceptfds, struct timeval *timeout);
-
+                            fd_set *exceptfds, struct timeval *timeout);
 
 2. 该函数可以同时监听多个套接字，如果其中一个有数据到来就返回，并且可以设置超时时间，如果超时时间到了也返回。
 
@@ -30,14 +24,13 @@ tags: socket select
 
 4. 中间的三个参数readfds、writefds、exceptfds指定要让内核测试读、写和异常条件的描述。
 
-5. 最后一个参数timeout指定超时时间 
+5. 最后一个参数timeout指定超时时间
 
         struct timeval
         {
             time_t tv_sec; /* Seconds. */
             suseconds_t tv_usec; /* Microseconds. */
         };
-        
 
 该参数有以下三种可能：
 
