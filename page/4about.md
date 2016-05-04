@@ -2,56 +2,44 @@
 layout: page
 title: About
 permalink: /about/
-icon: heart
+icon: glyphicon-heart
 ---
 
-* content
-{:toc}
+### 关于我
 
-## 关于我
+>一名热爱 IT 的技术宅，喜欢探究计算机的本质，希望成为嵌入式行业大牛。    
 
-在校硕士研究生一枚，就读于西安交通大学软件工程专业，2016年毕业。即将入职阿里巴巴，前端开发工程师。
+在校学生一枚，自动化专业，2016年毕业。   
 
-主要兴趣集中在前端开发，大前端的概念深入我心。将更多的业务逻辑放在前端中，这很有趣。同时，将自己构想的内容实现出来，这种感觉很愉快。
+专研于Linux内核、Linux驱动、ARM、Uboot。
 
-热爱美好的事物，热爱摇滚乐，组过乐队，卖过唱。
+热爱旅行，延时摄影，爱听纯音乐，对心理学非常感兴趣！
 
-很喜欢崔健的歌词：现实像块石头，精神像个蛋，石头虽然坚硬，可蛋里才是生命。
+在成为大神的道路上总是充满孤独！ 
 
-还有，学习是一个非常愉快的过程。共同加油！
+---
 
-* 2016.6 毕业于西安交通大学 软件工程硕士
-* 2015.12 获得2014-2015学年二等奖学金
-* 2015.7-2015.8 联想服务，前端开发工程师（实习生）
-* 2013.6 毕业于西安交通大学 理学院
+### 收藏的博客
 
-## 联系我
+[Linux常用命令教程](http://linuxtools-rst.readthedocs.org/zh_CN/latest/index.html) \| [编程随想的博客](http://www.chinagfw.org/) \| [泰晓科技](http://tinylab.org/) \| [酷 壳 – CoolShell.cn](http://coolshell.cn/) \| [Linux内核之旅](http://www.kerneltravel.net/)
 
-* GitHub：[Gaohaoyang](https://github.com/Gaohaoyang)
-* email：gaohaoyang126@126.com
-* [Weibo](http://weibo.com/3115521wh)
-* [知乎](https://www.zhihu.com/people/gaohaoyang)
-* [Facebook](https://www.facebook.com/gaohaoyang.water)
-* [Twitter](https://twitter.com/gaohaoyang126)
-* [豆瓣](https://www.douban.com/people/42525035/)
-* [豆瓣音乐人-浩阳的小站](https://site.douban.com/haoyangaiyinyue/)
+---
 
-## 关于本站
+### 关于本站   
 
-**若您想使用这个 jekyll 博客主题，请访问：[https://github.com/Gaohaoyang/gaohaoyang.github.io](https://github.com/Gaohaoyang/gaohaoyang.github.io)**
+本人记性不好，学习的新东西要及时记录下来！
 
-~欢迎使用~
+此博客将记录我的技术生涯！
 
-欢迎大家提一些对本站主题的建议，可以直接在下面留言或者新建一个 [Issue](https://github.com/Gaohaoyang/gaohaoyang.github.io/issues)。
+此博客文章均属于原创和译文，欢迎转载但 __请注明文章出处__！
 
-* 2016.3-2016.4 进行了一次大的改版和重构，详见 [README](https://github.com/Gaohaoyang/gaohaoyang.github.io/blob/master/README.md) 和博文 [对这个 jekyll 博客主题的改版和重构](http://gaohaoyang.github.io/2016/03/12/jekyll-theme-version-2.0/)
-* 2015.3-2015.4 完成了这个博客主题的第一版。
+2014.7.12 | 在 Git 上安营扎寨。
+2015.8.10 | 在 Git 上搭建此博客。
 
+---
 
-## 友情链接
+#### 友情链接
 
-[羡辙杂俎](http://zhangwenli.com/blog) \| [Anotherhome](https://www.anotherhome.net) \| [Reverland](http://reverland.org/) \| [ZhiLi](http://lizhipower.github.io/) \| [Simmer](http://simmer-jun.github.io/) \| [awthink](http://awthink.net/) \| [Aralic](http://aralic.github.io/) \| [zchen9](http://www.chen9.info/) \| [wuhuaji](http://wuhuaji.me/) \| [lisheng](http://www.lishengcn.cn/) \| [薛彬XueBin](http://axuebin.com/blog/)
+[虾米音乐](http://www.xiami.com/space/lib-song/u/36002852?spm=a1z1s.6626009.229054153.3.7v3L46) \| [CSDN](http://blog.csdn.net/u014328976/article) \| [博客园](http://www.cnblogs.com/cxd2014/p/) \| [Facebook](https://www.facebook.com/profile.php?id=100006606157322) \| [知乎](http://www.zhihu.com/people/cheng-sheng-92) \| [豆瓣](http://www.douban.com/people/81914486/)
 
-## Comments
-
-{% include comments.html %}
+---
