@@ -33,7 +33,7 @@ layout: default
         <article itemscope itemtype="http://schema.org/BlogPosting">
         {{content}}
         </article>
-        <hr>
+       <!-- <hr>
         {% assign hasSimilar = '' %}
         {% for post in site.related_posts %}
             {% assign postHasSimilar = false %}
@@ -59,8 +59,9 @@ layout: default
         {% endfor %}
         {% if hasSimilar.size > 0 %}
             </ul>
-        {% endif %}
 
+        {% endif %}
+         -->
 
         <h2 id="comments">Comments</h2>
         {% include comments.html %}
@@ -77,7 +78,7 @@ layout: default
                     Content
                 </div>
                 <ul id="content-side" class="content-ul">
-                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    <!--<li><a href="#similar_posts">Similar Posts</a></li>-->
                     <li><a href="#comments">Comments</a></li>
                 </ul>
             </div>
