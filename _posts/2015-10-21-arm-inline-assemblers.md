@@ -3,7 +3,7 @@ layout: post
 title:  "ARM内联汇编"
 date:   2015-10-22 09:16:10
 categories: arm
-excerpt: arm 汇编
+tags: arm 汇编
 ---
 
 * content

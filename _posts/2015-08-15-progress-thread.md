@@ -3,7 +3,7 @@ layout: post
 title:  "Linux中的进程与线程"
 date:   2015-08-15 22:40:10
 categories: linux
-excerpt: linux 进程 线程
+tags: linux 进程 线程
 ---
 
 * content

@@ -4,7 +4,7 @@ layout: post
 title:  "移植Linux到一个新的处理器架构上 part 1"
 date:   2015-11-15 21:40:10
 categories: linux
-excerpt: 移植Linux内核
+tags: 移植Linux内核
 
 ---
 

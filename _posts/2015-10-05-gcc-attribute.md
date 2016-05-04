@@ -4,7 +4,7 @@ layout: post
 title:  "GCC常见属性"
 date:   2015-10-05 20:40:10
 categories: others
-excerpt:  GCC属性
+tags:  GCC属性
 
 ---
 

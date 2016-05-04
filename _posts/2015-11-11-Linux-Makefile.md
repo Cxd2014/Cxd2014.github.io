@@ -4,7 +4,7 @@ layout: post
 title:  "Linux内核的Makefile"
 date:   2015-11-11 21:40:10
 categories: linux
-excerpt: Makefile Linux内核
+tags: Makefile Linux内核
 
 ---
 

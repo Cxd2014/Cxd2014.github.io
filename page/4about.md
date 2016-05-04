@@ -40,10 +40,10 @@ icon: heart
 2014.7.12 | 在 Git 上安营扎寨。
 2015.8.10 | 在 Git 上搭建此博客。
 
----
 
-#### 友情链接
+
+### 友情链接
 
 [虾米音乐](http://www.xiami.com/space/lib-song/u/36002852?spm=a1z1s.6626009.229054153.3.7v3L46) \| [CSDN](http://blog.csdn.net/u014328976/article) \| [博客园](http://www.cnblogs.com/cxd2014/p/) \| [Facebook](https://www.facebook.com/profile.php?id=100006606157322) \| [知乎](http://www.zhihu.com/people/cheng-sheng-92) \| [豆瓣](http://www.douban.com/people/81914486/)
 
----
+{% include comments.html %}

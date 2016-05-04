@@ -4,12 +4,16 @@ layout: post
 title:  "Git常用命令"
 date:   2015-08-10 09:16:10
 categories: others
-excerpt: git command
+tags: git command
 
 ---
 
 * content
 {:toc}
+
+
+
+
 
 
 ### Git常用命令列表

@@ -3,7 +3,7 @@ layout: post
 title:  "GDB GCC常用命令"
 date:   2015-08-11 12:40:10
 categories: others
-excerpt: GDB命令 GCC命令选项
+tags: GDB命令 GCC命令选项
 ---
 
 * content

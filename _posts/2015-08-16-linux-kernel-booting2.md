@@ -3,7 +3,7 @@ layout: post
 title:  "Linux2.6.38内核启动分析之二"
 date:   2015-08-12 21:40:10
 categories: linux
-excerpt: linux kernel 内核启动分析
+tags: linux kernel 内核启动分析
 ---
 
 * content

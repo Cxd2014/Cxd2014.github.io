@@ -4,8 +4,8 @@ layout: default
 
 <div class="page clearfix" index>
     <div class="left">
-        <h1>Welcome to HyG's Blog!</h1>
-        <small>这里记录着我的前端学习之路</small>
+        <h1>Welcome to CXD's Blog!</h1>
+        <small>我的嵌入式成长记录</small>
         <hr>
         <ul>
             {% for post in paginator.posts %}
@@ -33,12 +33,15 @@ layout: default
                     {% include tag.html %}
                     </div>
                 </div>
+                <!--
                 <div class="excerpt">
                     {{post.excerpt}}
                 </div>
+
                 <div class="read-all">
                     <a  href="{{ post.url | prepend: site.baseurl }}"><i class="fa fa-newspaper-o"></i>Read All</a>
                 </div>
+                -->
                 <hr>
               </li>
             {% endfor %}

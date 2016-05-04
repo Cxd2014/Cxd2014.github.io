@@ -4,7 +4,7 @@ layout: post
 title:  "Linux下的sublime安装教程"
 date:   2015-10-23 09:16:10
 categories: others
-excerpt: sublime安装教程
+tags: sublime安装教程
 
 ---
 

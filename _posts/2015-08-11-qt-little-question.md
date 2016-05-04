@@ -3,7 +3,7 @@ layout: post
 title:  "Qt中遇到的小问题总结"
 date:   2015-08-11 17:10:10
 categories: Qt
-excerpt: Qt
+tags: Qt
 ---
 
 * content

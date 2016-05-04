@@ -3,7 +3,7 @@ layout: post
 title:  "ARM异常处理"
 date:   2015-10-24 15:16:10
 categories: arm
-excerpt: arm 异常处理
+tags: arm 异常处理
 ---
 
 * content

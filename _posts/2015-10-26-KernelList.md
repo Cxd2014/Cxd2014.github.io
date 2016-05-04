@@ -4,7 +4,7 @@ layout: post
 title:  "Linux内核链表"
 date:   2015-10-26 21:40:10
 categories: linux
-excerpt: linux kernel list 内核链表
+tags: linux kernel list 内核链表
 ---
 
 * content
