@@ -43,7 +43,7 @@ tags: sublime安装教程
         apt-get install build-essential libgtk2.0-dev
 
 2. 编译sublime_imfix.c文件，将编译后的文件放在sublime安装文件中
-
+```c
        /* 
         sublime-imfix.c 
         Use LD_PRELOAD to interpose some function to fix sublime input method support for linux. 
@@ -123,6 +123,7 @@ tags: sublime安装教程
           }  
           gdk_window_add_filter (window, event_filter, context);   
         }   
+```
 
     编译命令:
 
