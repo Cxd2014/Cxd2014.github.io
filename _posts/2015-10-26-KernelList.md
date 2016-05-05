@@ -116,17 +116,21 @@ static inline void list_del_init(struct list_head *entry)
 #### 遍历链表
 
 * 用于遍历链表然后获取节点
-```c
-#define list_for_each(pos, head) \
-	for (pos = (head)->next; prefetch(pos->next), pos != (head); \
-        	pos = pos->next)
-```
+
+        
+        #define list_for_each(pos, head) \
+            for (pos = (head)->next; prefetch(pos->next), pos != (head); \
+                    pos = pos->next)
+    
+
 * 用于遍历链表然后删除节点
-```c
-#define list_for_each_safe(pos, n, head) \
-	for (pos = (head)->next, n = pos->next; pos != (head); \
-		pos = n, n = pos->next)
-```
+
+      
+        #define list_for_each_safe(pos, n, head) \
+            for (pos = (head)->next, n = pos->next; pos != (head); \
+                pos = n, n = pos->next)
+    
+
 
 #### 链表的使用
 

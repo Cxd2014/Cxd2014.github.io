@@ -39,9 +39,8 @@
         code_link: 'https://github.com/Cxd2014/DataStruct',
         title: 'C语言版数据结构',
         core_tech: 'C 数据结构',
-        description: 'C语言版数据结构的练习'
-    }
-    ];
+        description: 'C语言版数据结构'
+    }];
 
     contentInit(demoContent) //内容初始化
     waitImgsLoad() //等待图片加载，并执行布局初始化
