@@ -44,6 +44,7 @@ layout: default
                         <!--<h2 id="similar_posts">Similar Posts</h2>-->
                         <ul>
                         {% endif %}
+                        <!--
                         <li class="relatedPost">
                             <a href="{{ site.url }}{{ post.url }}">{{ post.title }}
                             {% if post.series %}
@@ -51,6 +52,7 @@ layout: default
                             {% endif %}
                             </a>
                         </li>
+                        -->
                         {% capture hasSimilar %}{{ hasSimilar }}*{% endcapture %}
                         {% assign postHasSimilar = true %}
                     {% endif %}
@@ -96,6 +98,7 @@ layout: default
         aTags[i].setAttribute('target', '_blank')
     }
 }());
+
 </script>
 <script src="{{ "/js/scroll.min.js " | prepend: site.baseurl }}" charset="utf-8"></script>
 <script src="{{ "/js/pageContent.js " | prepend: site.baseurl }}" charset="utf-8"></script>
