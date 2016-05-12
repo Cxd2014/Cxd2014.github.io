@@ -2,7 +2,7 @@
 layout: post
 title:  "Qt中各种数据类型之间的相互转换"
 date:   2015-08-11 16:40:10
-categories: Qt
+categories: programming
 tags: Qt 类型转换
 ---
 

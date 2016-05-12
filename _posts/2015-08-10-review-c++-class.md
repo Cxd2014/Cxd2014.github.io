@@ -2,7 +2,7 @@
 layout: post
 title:  "C++关于类的复习"
 date:   2015-08-10 09:06:10
-categories: Qt
+categories: programming
 tags: C++ Class
 ---
 
