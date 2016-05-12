@@ -2,7 +2,7 @@
 
 layout: post
 title:  "头文件中不能定义变量"
-date:   2016-05-1 12:20:10
+date:   2016-05-11 12:20:10
 categories: programming
 tags: 全局变量 头文件
 
