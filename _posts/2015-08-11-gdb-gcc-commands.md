@@ -19,7 +19,7 @@ list file.c:fanction  |显示file.c文件中的fanction函数
 break file.c:fanction |在file.c文件中的fanction函数处打一个断点
 break file.c:100      |在file.c文件中的第100行打一个断点
 info break            |查看所有断点
-delete break num      |删除断点号为 num 的断点
+delete num            |删除断点号为 num 的断点
 run                   |开始运行程序
 bt                    |显示程序的栈
 watch expr            |监视 expr变量，（每次运行到变量会打印变量的值）（watch不能简写）
@@ -33,6 +33,7 @@ quit                  |退出调试
 * 注
 1. 需要调试的程序在编译的时候要加 -g 选项，程序才能进行调试
 2. 以上所有命令都可以简写首字母，例：`info break` ==> `i b` 除特殊声明外
+3. gdb --args app args 传递参数给调试程序。app是需要调试的程序 args为传递的参数，可以有多个参数  
 
 ---
 
