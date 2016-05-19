@@ -16,7 +16,7 @@ tags: C optimization
 本片文章翻译于：[Writing Efficient C and C Code Optimization](http://www.codeproject.com/Articles/6154/Writing-Efficient-C-and-C-Code-Optimization)
 
 
-注不是全部翻译，只是把我觉得非常有用的翻译了。
+注：不是全部翻译，只是把我觉得非常有用的翻译了。
 
 ### 整型
 
