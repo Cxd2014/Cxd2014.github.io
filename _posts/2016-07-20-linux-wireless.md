@@ -3,7 +3,7 @@
 layout: post
 title:  "Linux无线网络简介"
 date:   2016-07-20 10:20:10
-categories: programming
+categories: linux
 tags: Linux wireless wifi
 
 ---
@@ -29,6 +29,8 @@ Linux无线模块和内核的接口是怎样的？无线数据包是怎样接受
 
 在开始谈论之前让我们先了解一下无线网络的总体框架，如图1。
 它展示了Linux内核网络中的各个模块和Linux无线网络是怎样加入到内核的。
+
+![arch]({{ "/css/pics/arch.jpg"}}) 
 
 其中最大的一块区域是Linux内核空间。用户空间的应用程序运行在它上面，硬件设备在内核的下面。左边是以太网设备，右边是WIFI设备。
 
