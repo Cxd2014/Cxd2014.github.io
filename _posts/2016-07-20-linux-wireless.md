@@ -14,7 +14,7 @@ tags: Linux wireless wifi
 
 ### 前言
 
-本片文章翻译于：[Linux Wireless Networking: a short walk](https://www.linux.com/blog/linux-wireless-networking-short-walk)
+本文章翻译于：[Linux Wireless Networking: a short walk](https://www.linux.com/blog/linux-wireless-networking-short-walk)
 
 
 ### Linux无线网络简介
@@ -42,7 +42,7 @@ WIFI设备有两种类型，它取决于IEEE802.11 MLME是在哪实现的。如�
 Linux无线子系统和WIFI驱动都是处理OSI模型中的下面两层(MAC 和 PHY层)。如果需要更细致的划分MAC层可以分为上层MAC和下层MAC，上层MAC负责管理方面（例如：探测、认证和关联），
 下层MAC负责对时序要求严格的操作例如ACK。大多数时候，硬件例如WiFi适配器，处理大部分PHY层和下层MAC的任务，而Linux无线子系统处理大多数上层MAC的任务。
 
-### 模块见的接口
+### 模块之间的接口
 
 图1中的各个模块都是明确划分的，这意味着一个模块发生了变化不会影响其他模块。例如，我们可能会对WiFi驱动模块做一些修改（例如：打补丁或者增加新的驱动来支持新设备），
 但是这些改变不会影响mac80211模块，我们不需要改变mac80211模块中的代码。在比如增加一个新的网络协议，理想情况下不需要改变socket层和设备无关层的代码。
@@ -50,8 +50,8 @@ Linux无线子系统和WIFI驱动都是处理OSI模型中的下面两层(MAC 和
 
 ```c
 static const struct ieee80211_ops rt73usb_mac80211_ops = { 
-	.tx                     = rt2x00mac_tx,
-	.start                  = rt2x00mac_start,         
+    .tx                     = rt2x00mac_tx,
+    .start                  = rt2x00mac_start,         
     .stop                   = rt2x00mac_stop,         
     .add_interface          = rt2x00mac_add_interface,         
     .remove_interface       = rt2x00mac_remove_interface,         
@@ -162,7 +162,7 @@ static const struct genl_opsnl80211_ops[] = {
 
 ```c
 const struct cfg80211_ops mac80211_config_ops = {
-	...    
+    ...    
     .scan = ieee80211_scan,
     ...
 };
@@ -171,19 +171,19 @@ const struct cfg80211_ops mac80211_config_ops = {
 mac80211模块中的`ieee80211_scan`函数会接管扫描任务：
 
 ```c
-=>ieee80211_scan_state_send_probe 
+    =>ieee80211_scan_state_send_probe 
 
-=>ieee80211_send_probe_req
+    =>ieee80211_send_probe_req
 
-=>ieee80211_tx_skb_tid_band
+    =>ieee80211_tx_skb_tid_band
 
-=>ieee80211_xmit
+    =>ieee80211_xmit
 
-=>ieee80211_tx
+    =>ieee80211_tx
 
-=>ieee80211_tx_frags
+    =>ieee80211_tx_frags
 
-=>drv_tx
+    =>drv_tx
 ```
 
 ### 怎样处理接受的数据包？
