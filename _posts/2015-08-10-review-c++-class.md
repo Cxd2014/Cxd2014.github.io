@@ -32,7 +32,9 @@ class class_name
         */  
 };  
 ```
+
 ## 在类外定义成员函数
+
 ```c++
 void class_name::fanction_name()  
 {  
@@ -41,6 +43,7 @@ void class_name::fanction_name()
 ```
 
 ## 定义内置函数
+
 ```c++
 inline void class_name::fanction_name()  
 {  

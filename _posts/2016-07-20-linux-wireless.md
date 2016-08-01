@@ -113,7 +113,7 @@ struct net_device_ops {
 对于WiFi设备来说，通常是由`mac80211`模块（而不是设备驱动）注册`netdev_ops`。查看`net/mac80211/iface.c`：
 
 ```c
-static const struct net_device_opsieee80211_dataif_ops = {        
+static const struct net_device_ops ieee80211_dataif_ops = {        
     .ndo_open               = ieee80211_open,        
     .ndo_stop               = ieee80211_stop,        
     .ndo_uninit             = ieee80211_uninit,        
@@ -128,7 +128,13 @@ static const struct net_device_opsieee80211_dataif_ops = {
 因此mac80211模块是作为一个`net_device`出现的，当一个数据包需要通过WiFi发送时对应的发送函数`ieee80211_subif_start_xmit`会被调用。然后我们就进入到了mac80211模块，` ieee80211_subif_start_xmit`函数内的调用链如下：
 ieee80211_xmit => ieee80211_tx => ieee80211_tx_frags => drv_tx
 现在我们到了mac80211模块和WiFi驱动的边界。`drv_tx`只是一个简单的包装函数，它对应着WiFi设备驱动注册的发送函数`tx`：
-static inline void drv_tx(struct ieee80211_local *local, struct ieee80211_tx_control *control, struct sk_buff *skb){        local->ops->tx(&local->hw, control, skb);}
+
+```c
+static inline void drv_tx(struct ieee80211_local *local, struct ieee80211_tx_control *control, struct sk_buff *skb)
+{        
+    local->ops->tx(&local->hw, control, skb);
+}
+```
 
 这时mac80211模块结束的地方，该设备驱动接管了。
 
