@@ -17,7 +17,7 @@ tags: vmware network linux
 将Linux系统中存放代码的文件夹共享出来以便于在`windows`下面可以使用`SourceInsight`来阅读和修改代码；并且也需要Linux虚拟机可以访问外网。
 这样的情况一张网卡就可以搞定，只需要在虚拟机中配置网卡为`NAT`模式。
 
- ![nat]({{ "/css/pics/nat.jpg"}}) 
+![nat]({{ "/css/pics/nat.jpg"}}) 
 
 但是这样会有一个问题：就是主机每次拔插网线的时候都会使网络卡顿一会儿时间（因为主机IP地址变了之后`NAT`模式需要更新），导致这段时间内不能编辑代码并且会让`SourceInsight`软件一段时间内出现无响应的情况。
 当然如果你不需要经常插拔网线这样也是没有问题的，可是身在一个网络设备公司我每天需要插拔网线无数次，这就很痛苦了。。。
@@ -28,12 +28,12 @@ tags: vmware network linux
 
 在虚拟机中增加一张网卡，将网卡配置为`VMnet1`(仅主机模式)：
 
- ![nat]({{ "/css/pics/VMnet1.jpg"}}) 
+![VMnet1]({{ "/css/pics/VMnet1.jpg"}}) 
 
 增加一张网卡后，直接在Linux中执行`ifconfig`命令不会看到新增的网卡，需要进入`/etc/sysconfig/network/`目录进行配置：
 没有配置之前是没有`ifcfg-eth1`文件的，需要自己新建一个`ifcfg-eth1`文件然后将`ifcfg-eth0`文件中的内容复制过来。
 
- ![nat]({{ "/css/pics/cmd.jpg"}}) 
+![cmd]({{ "/css/pics/cmd.jpg"}}) 
 
 最后重启网络服务：`service network restart`
 
