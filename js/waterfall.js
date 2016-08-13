@@ -18,7 +18,7 @@
         code_link: 'https://github.com/Cxd2014/LinuxDriversLearn',
         title: 'Linux驱动学习',
         core_tech: 'Linux驱动',
-        description: '照着韦东山老师的教程写的Linux驱动'
+        description: '韦东山老师的教程写的Linux驱动'
     },{
         demo_link: 'http://pan.baidu.com/s/1skcRIVj',
         img_link: '/css/4566.jpg',

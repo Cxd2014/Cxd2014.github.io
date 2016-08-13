@@ -20,6 +20,7 @@ tags: vmware network linux
 ![nat]({{ "/css/pics/nat.jpg"}}) 
 
 但是这样会有一个问题：就是主机每次拔插网线的时候都会使网络卡顿一会儿时间（因为主机IP地址变了之后`NAT`模式需要更新），导致这段时间内不能编辑代码并且会让`SourceInsight`软件一段时间内出现无响应的情况。
+
 当然如果你不需要经常插拔网线这样也是没有问题的，可是身在一个网络设备公司我每天需要插拔网线无数次，这就很痛苦了。。。
 
 注：以下都是在`opensuse`系统中操作的。
@@ -31,6 +32,7 @@ tags: vmware network linux
 ![VMnet1]({{ "/css/pics/VMnet1.jpg"}}) 
 
 增加一张网卡后，直接在Linux中执行`ifconfig`命令不会看到新增的网卡，需要进入`/etc/sysconfig/network/`目录进行配置：
+
 没有配置之前是没有`ifcfg-eth1`文件的，需要自己新建一个`ifcfg-eth1`文件然后将`ifcfg-eth0`文件中的内容复制过来。
 
 ![cmd]({{ "/css/pics/cmd.jpg"}}) 
@@ -38,6 +40,7 @@ tags: vmware network linux
 最后重启网络服务：`service network restart`
 
 现在再次执行`ifconfig`命令可以看到多出来一张网卡。最后使用这个网卡的IP地址在`Windows`系统中映射一个网络驱动器。
+
 此后无论你怎么拔插主机网线都不会卡顿。此时`VMnet1`(仅主机模式)模式的网卡只能与主机通信，`NAT`模式的网卡可以访问外网。
 
 ### 科普
