@@ -40,7 +40,29 @@
         title: 'C语言版数据结构',
         core_tech: 'C 数据结构',
         description: 'C语言版数据结构'
-    }];
+    },{
+        demo_link: 'http://v.youku.com/v_show/id_XMTYyMDE2NDcwOA==.html',
+        img_link: '/css/1.png',
+        code_link: 'http://v.youku.com/v_show/id_XMTYyMDE2NDcwOA==.html',
+        title: '毕业相册',
+        core_tech: '毕业相册',
+        description: '大学毕业电子相册'
+    },{
+        demo_link: 'http://v.youku.com/v_show/id_XNzk2MDc4NTEy.html',
+        img_link: '/css/2.jpg',
+        code_link: 'http://v.youku.com/v_show/id_XNzk2MDc4NTEy.html',
+        title: '穿墙术',
+        core_tech: 'AE特效之穿墙',
+        description: 'AE特效之穿墙'
+    },{
+        demo_link: 'http://v.youku.com/v_show/id_XOTE2OTM3NTc2.html',
+        img_link: '/css/3.jpg',
+        code_link: 'http://v.youku.com/v_show/id_XOTE2OTM3NTc2.html',
+        title: '分身术',
+        core_tech: 'AE特效之分身术',
+        description: 'AE特效之分身术'
+    }
+    ];
 
     contentInit(demoContent) //内容初始化
     waitImgsLoad() //等待图片加载，并执行布局初始化
@@ -62,7 +84,7 @@ function contentInit(content) {
         htmlArr.push('<h3 class="demo-title">')
         htmlArr.push('<a href="'+content[i].demo_link+'">'+content[i].title+'</a>')
         htmlArr.push('</h3>')
-        htmlArr.push('<p>主要技术：'+content[i].core_tech+'</p>')
+        /*htmlArr.push('<p>主要技术：'+content[i].core_tech+'</p>')*/
         htmlArr.push('<p>'+content[i].description)
         htmlArr.push('<a href="'+content[i].code_link+'">源代码 <i class="fa fa-code" aria-hidden="true"></i></a>')
         htmlArr.push('</p>')
