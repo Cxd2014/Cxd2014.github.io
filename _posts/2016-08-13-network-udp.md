@@ -1,7 +1,7 @@
 ---
 
 layout: post
-title:  "Linux协议栈--UDP协议数据的发送和接受"
+title:  "Linux协议栈--UDP协议数据的发送和接收"
 date:   2016-08-13 10:20:10
 categories: network
 tags: TCP/IP udp network
@@ -313,6 +313,121 @@ do_confirm:
 ```
 
 ### UDP数据报的接收过程
+
+网卡接收到的网络数据经过IP层处理后，会调用上面给出的UDP与IP层的接口函数`udp_rcv`,此函数的主要作用是将接收到的数据包存放到缓存区中；
+然后当用户调用`recvmsg`函数时从缓存区中取出数据。
+
+#### IP层往缓存区中存数据
+
+`udp_rcv`函数是`__udp4_lib_rcv`函数的包装函数，所以主要功能在`__udp4_lib_rcv`函数中实现：
+
+```c
+int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
+		   int proto)
+{
+	struct sock *sk;
+	struct udphdr *uh;
+	unsigned short ulen;
+	struct rtable *rt = skb_rtable(skb);
+	__be32 saddr, daddr;
+	struct net *net = dev_net(skb->dev);
+
+	/*
+	 *  检查UDP协议头是否正确
+	 */
+	if (!pskb_may_pull(skb, sizeof(struct udphdr)))
+		goto drop;		/* No space for header. */
+
+	uh   = udp_hdr(skb);        //获取UDP协议头
+	ulen = ntohs(uh->len);      //获取数据包的长度
+	saddr = ip_hdr(skb)->saddr; //获取IP源地址
+	daddr = ip_hdr(skb)->daddr; //获取IP目的地址
+
+	if (ulen > skb->len)
+		goto short_packet;
+
+	/* 查看校验和是否正确 */
+	if (proto == IPPROTO_UDP) {
+		/* UDP validates ulen. */
+		if (ulen < sizeof(*uh) || pskb_trim_rcsum(skb, ulen))
+			goto short_packet;
+		uh = udp_hdr(skb);
+	}
+
+	if (udp4_csum_init(skb, uh, proto))
+		goto csum_error;
+	
+	/* 如果路由标志为组传送或广播地址，则完成数据包的广播传送与组传送 */
+	if (rt->rt_flags & (RTCF_BROADCAST|RTCF_MULTICAST))
+		return __udp4_lib_mcast_deliver(net, skb, uh,
+				saddr, daddr, udptable);
+
+	/* 检查是否有打开的套接字的等待接受数据包 */
+	sk = __udp4_lib_lookup_skb(skb, uh->source, uh->dest, udptable);
+
+	if (sk != NULL) {	//有打开的套接字在等待接收数据包
+		int ret = udp_queue_rcv_skb(sk, skb); //将数据包放到套接字接收缓冲区
+		sock_put(sk); //释放套接字
+
+		/* a return value > 0 means to resubmit the input, but
+		 * it wants the return to be -protocol, or 0
+		 */
+		if (ret > 0)
+			return -ret;
+		return 0;
+	}
+	
+	if (!xfrm4_policy_check(NULL, XFRM_POLICY_IN, skb))
+		goto drop;
+	nf_reset(skb);
+
+	/* 没有打开的UDP套接字，对数据包进行校验和计算，如果不正确就扔掉 */
+	/* No socket. Drop packet silently, if checksum is wrong */
+	if (udp_lib_checksum_complete(skb))
+		goto csum_error;
+	
+	/* 校验和正确，更新UDP统计信息，向发送方返回端口不可达ICMP报文 */
+	UDP_INC_STATS_BH(net, UDP_MIB_NOPORTS, proto == IPPROTO_UDPLITE);
+	icmp_send(skb, ICMP_DEST_UNREACH, ICMP_PORT_UNREACH, 0);
+
+	/*
+	 * Hmm.  We got an UDP packet to a port to which we
+	 * don't wanna listen.  Ignore it.
+	 */
+	kfree_skb(skb);
+	return 0;
+
+short_packet:
+	LIMIT_NETDEBUG(KERN_DEBUG "UDP%s: short packet: From %pI4:%u %d/%d to %pI4:%u\n",
+		       proto == IPPROTO_UDPLITE ? "-Lite" : "",
+		       &saddr,
+		       ntohs(uh->source),
+		       ulen,
+		       skb->len,
+		       &daddr,
+		       ntohs(uh->dest));
+	goto drop;
+
+csum_error:
+	/*
+	 * RFC1122: OK.  Discards the bad packet silently (as far as
+	 * the network is concerned, anyway) as per 4.1.3.4 (MUST).
+	 */
+	LIMIT_NETDEBUG(KERN_DEBUG "UDP%s: bad checksum. From %pI4:%u to %pI4:%u ulen %d\n",
+		       proto == IPPROTO_UDPLITE ? "-Lite" : "",
+		       &saddr,
+		       ntohs(uh->source),
+		       &daddr,
+		       ntohs(uh->dest),
+		       ulen);
+drop:
+	UDP_INC_STATS_BH(net, UDP_MIB_INERRORS, proto == IPPROTO_UDPLITE);
+	kfree_skb(skb);
+	return 0;
+}
+```
+
+#### 用户往缓存区中取数据
 
 当用户调用`recvmsg`函数时，最终会调用到协议特定的接收函数，UDP协议的接收函数是`udp_recvmsg`;
 （定义在`net/ipv4/udp.c`文件中）
