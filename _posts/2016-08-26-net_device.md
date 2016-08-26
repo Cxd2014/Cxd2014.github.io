@@ -65,6 +65,7 @@ static const struct net_device_ops net_ops = {
 	.ndo_validate_addr	= eth_validate_addr,
 };
 ```
+
 ### 打开网络设备
 
 上层程序调用`open`函数时最终会执行网络设备注册的`ndo_open`函数，如CS8900A注册的`net_open`函数。此函数的作用是为设备申请支持设备活动的各种资源，
