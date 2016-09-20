@@ -20,7 +20,7 @@ tags: 处理器架构 流水线 分支预测
 以前在学校读过《计算机体系结构嵌入式方法》这本书，对CPU的体系结构有了一个比较清晰的了解，
 然后偶然在网上看到这篇博文瞬间觉得简直就是这本书的一个全面总结，遂想把他翻译出来，就当这本书的读书笔记吧！
 
-## 现代微处理器架构
+### 现代微处理器架构
 
 __警告：本文章非权威，仅仅只是兴趣__
 
@@ -42,12 +42,12 @@ __警告：本文章非权威，仅仅只是兴趣__
 
 频率|型号|SPECint95|SPECfp95
 ---|---
-195 MHz |MIPS R10000|	11.0	 17.0
-400 MHz	|Alpha 21164|	12.3	 17.2
-300 MHz	|UltraSPARC	|   12.1	 15.5
-300 MHz	|Pentium II	|   11.6	 8.8
-300 MHz	|PowerPC G3	|   14.8	 11.4
-135 MHz	|POWER2	    |   6.2	     17.6
+195 MHz |MIPS R10000|	11.0	| 17.0
+400 MHz	|Alpha 21164|	12.3	| 17.2
+300 MHz	|UltraSPARC	|   12.1	| 15.5
+300 MHz	|Pentium II	|   11.6	| 8.8
+300 MHz	|PowerPC G3	|   14.8	| 11.4
+135 MHz	|POWER2	    |   6.2	    | 17.6
 
 表1 - 1997年左右的处理器性能
 
@@ -64,11 +64,13 @@ PowerPC G3处理器的频率也是300MHz它在处理常规整型运算时比其�
 考虑指令是怎样执行的 -- 首先是取指，然后解码，接着在合适的功能单元中执行，最后将结果写入寄存器。根据这个方案，一个简单的处理器执行一条指令需要4个周期（CPI=4）。。。
 
 ![sequential2]({{"/css/pics/cpu_architecture/sequential2.png"}})
+
 图1 - 顺序处理器的指令流
 
 现代处理器将这些阶段叠加到一条流水线中，就像一条装配流水线。一条指令正在执行的同时下一条指令开始解码，下下一条指令则正在取指。。。
 
 ![pipelined2]({{"/css/pics/cpu_architecture/pipelined2.png"}})
+
 图2 - 流水线处理器的指令流
 
 现在处理器的每个时钟周期可以执行一条指令（CPI=1）。在完全没有改变时钟频率的情况下将处理器速度提高了4倍。还不错吧？
@@ -80,17 +82,20 @@ PowerPC G3处理器的频率也是300MHz它在处理常规整型运算时比其�
 信号通过这一阶段的组合逻辑传输到下一阶段，在时钟周期的最后每个阶段产生的输出正好被下一阶段的锁存器捕获。。。
 
 ![pipelinedmicroarch2]({{"/css/pics/cpu_architecture/pipelinedmicroarch2.png"}})
+
 图3 - 流水线微架构
 
 因为每条指令在流水线的执行阶段完成后产生的结果是可用的，下一条指令应该可以马上使用这个结果，而不是等到这个结果在流水线写回阶段被提交到目标寄存器后才使用。
 为了实现一点，增加了被称为`旁路`的转发线路，将结果沿着流水线返回。。。
 
 ![pipelinedbypasses2]({{"/css/pics/cpu_architecture/pipelinedbypasses2.png"}})
+
 图4 - 流水线微架构中的旁路
 
 虽然每个流水线阶段看起来很简单，但是在`执行`这个关键阶段需要制造几组不同的逻辑（多条路径），为处理器必须有的每一种操作制作不同的功能单元。。。
 
 ![pipelinedfunctionalunits2]({{"/css/pics/cpu_architecture/pipelinedfunctionalunits2.png"}})
+
 图5 - 流水线微架构中的更多细节
 
 早期的RISC处理器，例如IBM的801研究原型，MIPS R2000（基于斯坦福大学的MIPS架构）和原版的SPARC（伯克利RISC的衍生项目） ，都实现了简单的5级流水线和上面介绍的一样。
@@ -104,6 +109,7 @@ PowerPC G3处理器的频率也是300MHz它在处理常规整型运算时比其�
 因此整个处理器可以运行在一个更高的时钟频率下！当然，此时每条指令需要花费更多的时钟周期来完成（时延），但是处理器仍然是每个周期完成一条指令（吞吐量），由于时钟频率更快所以处理器每秒可以执行更多的指令（实际性能）。。。
 
 ![superpipelined2]({{"/css/pics/cpu_architecture/superpipelined2.png"}})
+
 图6 - 超级流水线处理器的指令流
 
 Alpha架构特别喜欢这种技术，这也是为什么早期Alphas处理器拥有深度流水线在当时的时代下可以运行在如此之高的时钟频率下。
@@ -119,7 +125,7 @@ Pipeline Depth | Processors
 12	|Pentium Pro/II/III, Athlon 64/Phenom, Apple A6
 13	|Denver
 14	|UltraSPARC III/IV, Core 2, Apple A7/A8
-14/19	|Core i*2/i*3 Sandy/Ivy Bridge, Core i*4/i*5 Haswell/Broadwell
+14/19	|Core i\*2/i\*3 Sandy/Ivy Bridge, Core i\*4/i\*5 Haswell/Broadwell
 15	|Cortex-A15/A57
 16	|PowerPC G5, Core i*1 Nehalem
 18	|Bulldozer/Piledriver, Steamroller
@@ -137,6 +143,7 @@ UltraSPARC T1/T2/T3 Niagara处理器是深度化流水线趋势中的例外 -- U
 为了实现这一目标，取指和解码/调度阶段必须强化使他们可以并行解码多条指令，然后将他们分发到“执行资源”中去。。。
 
 ![superscalarmicroarch2]({{"/css/pics/cpu_architecture/superscalarmicroarch2.png"}})
+
 图7 - 超标量微架构
 
 当然，现在每个功能单元之间的流水线相互独立，他们甚至可以有不同数量的流水线级数。这可以使简单的指令更快的执行，从而减少`延迟`（我们很快会讲到）.
@@ -150,6 +157,7 @@ UltraSPARC T1/T2/T3 Niagara处理器是深度化流水线趋势中的例外 -- U
 在一个超标量处理器中，指令流大概像是这样的。。。
 
 ![superscalar2]({{"/css/pics/cpu_architecture/superscalar2.png"}})
+
 图8 - 超标量处理器中的指令流
 
 这是非常棒的！现在每个时钟周期可以完成3个指令（CPI=0.33或者IPC=3，也可以写成ILP=3（instruction-level parallelism）- 指令级并行）。
@@ -162,6 +170,7 @@ IBM POWER1处理器 - PowerPC的前代是第一个主流超标量处理器。之
 当然，处理器的深度流水线和多指令发射技术都在发展，所以超级流水线和超标量可以同时出现。。。
 
 ![superpipelinedsuperscalar2]({{"/css/pics/cpu_architecture/superpipelinedsuperscalar2.png"}})
+
 图9 - 超流水线-超标量处理器的指令流
 
 如今实际上每一款处理器都同时是超流水线-超标量的，所以被简称为超标量。严格的说超流水线只是表示更深级数的流水线。
@@ -176,9 +185,9 @@ Issue Width	| Processors
 4	|UltraSPARC III/IV, PowerPC G4e
 4/8	|Bulldozer/Piledriver, Steamroller
 5	|PowerPC G5
-6	|Athlon, Athlon 64/Phenom, Core 2, Core i*1 Nehalem, Core i*2/i*3 Sandy/Ivy Bridge, Apple A7/A8
+6	|Athlon, Athlon 64/Phenom, Core 2, Core i\*1 Nehalem, Core i\*2/i\*3 Sandy/Ivy Bridge, Apple A7/A8
 7	|Denver
-8	|Core i*4/i*5 Haswell/Broadwell
+8	|Core i\*4/i\*5 Haswell/Broadwell
 
 表3 - 通用处理器的发射带宽
 
@@ -196,6 +205,7 @@ Issue Width	| Processors
 除了解码/调度阶段更加简单（因为只需要解码/调度每个组中的子指令）外VLIW处理器的指令流和超标量的很像。。。
 
 ![vliw2]({{"/css/pics/cpu_architecture/vliw2.png"}})
+
 图10 - VLIW处理器的指令流
 
 除了简化调度逻辑外VLIW处理器和超标量处理器非常相似。尤其是站在编译器的角度来看（下面会讲到）。
@@ -213,10 +223,8 @@ Issue Width	| Processors
 好吧，考虑下面俩条语句。。。
 
 ```c
-
 a = b * c;
 d = a + 1;
-
 ```
 
 第二条语句依赖于第一条语句的结果 -- 处理器不可能在第一条语句执行完产生结果之前就执行第二条语句。这是一个非常严重的问题，因为相互依赖的指令不能并行执行。因此多发射在这种情况下也不能使用。
@@ -238,26 +246,22 @@ d = a + 1;
 流水线的另外一个关键问题是分支。考虑下面这段代码。。。
 
 ```c
-
 if (a > 7) {
     b = c;
 } else {
     b = d;
 }
-
 ```
 
 这段代码类似下面这种形式：
 
 ```c
-
   cmp a, 7    ; a > 7 ?
     ble L1
     mov c, b    ; b = c
     br L2
 L1: mov d, b    ; b = d
 L2: ...
-
 ```
 
 现在想象流水线处理器执行这段代码。当第二行的条件分支在流水线中到了执行阶段，处理器应该已经取指并解码了下一条指令，但是应该是那一条指令？他是取指并解码`if`分支（3，4行）还是`else`分支（第5行）？
