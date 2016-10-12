@@ -13,9 +13,7 @@ tags: svn grep vi 命令
 
 
 命令|解释
-
 ---|---
-
 svn co serverUrl | 到serverUrl服务器上下载代码
 svn commit -m "log" filename | 将文件filename上传到服务器，"log"为修改日志
 svn up -r versionNum | 回到指定版本号versionNum
@@ -25,44 +23,10 @@ svn log -v . -r versionNum | 查看versionNum版本号下修改了哪些文件�
 svn log --username name | 查看name用户所有上传的日志记录
 svn info | 查看svn的版本号、服务器地址等信息
 
-### grep命令
-
-* 在Makefile文件中查找"MAKEFLAGS"字符串
-
-```
-grep -n "MAKEFLAGS" Makefile
-```
-
-* 在当前目录下的所有文件中查找"LUN_FAILED"字符串
-
-```
-grep -rn "LUN_FAILED" ./
-```
-
-* 在当前目录下的.c和.h文件中查找"LUN_FAILED"字符串
-
-```
- grep -rn "LUN_FAILED" ./ --include *.[c,h]
-```
-
-* 在当前目录下的所有文件（但排除.h文件）中查找"CONFIG_TIMERFD"字符串
-
-```
- grep -rn "CONFIG_TIMERFD" ./ --exclude *.h
-```
-
-* 排除ac_cloud目录
-
-```
- grep -rn "main" ./ --exclude-dir ac_cloud
-```
-
 ### vi编辑器常用命令
 
 命令|解释
-
 ---|---
-
 i | 进入编辑模式
 Esc键 | 退出编辑模式，
 k | 光标上移一行
@@ -82,4 +46,28 @@ N | 查找上一个'text'字符串
 Shift键 + : | 进入尾行模式（在命令行模式下）
 :wq | 保存并退出
 :q! | 不保存并退出
+
+### grep命令
+
+* 在Makefile文件中查找"MAKEFLAGS"字符串
+
+__grep -n "MAKEFLAGS" Makefile__
+
+
+* 在当前目录下的所有文件中查找"LUN_FAILED"字符串
+
+__grep -rn "LUN_FAILED" ./__
+
+* 在当前目录下的.c和.h文件中查找"LUN_FAILED"字符串
+
+__grep -rn "LUN_FAILED" ./ --include *.[c,h]__
+
+* 在当前目录下的所有文件（但排除.h文件）中查找"CONFIG_TIMERFD"字符串
+
+__grep -rn "CONFIG_TIMERFD" ./ --exclude *.h__
+
+* 排除ac_cloud目录
+
+__grep -rn "main" ./ --exclude-dir ac_cloud__
+
 
