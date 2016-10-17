@@ -51,22 +51,22 @@ Shift键 + : | 进入尾行模式（在命令行模式下）
 
 1. 在Makefile文件中查找"MAKEFLAGS"字符串
 
-__grep -n "MAKEFLAGS" Makefile__
+	__grep -n "MAKEFLAGS" Makefile__
 
 2. 在当前目录下的所有文件中查找"LUN_FAILED"字符串
 
-__grep -rn "LUN_FAILED" ./__
+	__grep -rn "LUN_FAILED" ./__
 
 3. 在当前目录下的.c和.h文件中查找"LUN_FAILED"字符串
 
-__grep -rn "LUN_FAILED" ./ --include *.[c,h]__
+	__grep -rn "LUN_FAILED" ./ --include *.[c,h]__
 
 4. 在当前目录下的所有文件（但排除.h文件）中查找"CONFIG_TIMERFD"字符串
 
-__grep -rn "CONFIG_TIMERFD" ./ --exclude *.h__
+	__grep -rn "CONFIG_TIMERFD" ./ --exclude *.h__
 
 5. 排除ac_cloud目录
 
-__grep -rn "main" ./ --exclude-dir ac_cloud__
+	__grep -rn "main" ./ --exclude-dir ac_cloud__
 
 
