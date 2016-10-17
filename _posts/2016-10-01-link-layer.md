@@ -100,4 +100,6 @@ static void net_rx_action(struct softirq_action *h)
 
 ![tc]({{"/css/pics/tc.jpg"}})
 
+### 参考
 
+《嵌入式Linux网络体系结构设计与TCP/IP协议栈》
