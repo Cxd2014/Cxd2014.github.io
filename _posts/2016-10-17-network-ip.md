@@ -212,11 +212,11 @@ Linux内核在传输层实现了多个传输层协议实例，在应用与TCP/IP
 
 ![ip]({{"/css/pics/network-ip.jpg"}})
 
-图1 注：当裸IP使用了`IP_HDRINCL`选项时，由应用程序自己构造全部IP协议头部，所以可以直接调用`dst_input`函数。
+图1 注：当裸IP使用了`IP_HDRINCL`选项时，由应用程序自己构造全部IP协议头部，所以可以直接调用`dst_output`函数。
 
 下面介绍一下图中几个函数的作用：
 
-* `ip_queue_xmit`函数将数据包从传输层发送到网络层，设置路由、创建IP协议头和IP选项，调用`dst_input`发送
+* `ip_queue_xmit`函数将数据包从传输层发送到网络层，设置路由、创建IP协议头和IP选项，调用`dst_output`发送
 * `ip_append_data`函数将数据包缓存到缓冲区、管理缓冲区
 * `ip_push_pending_frames`函数将`ip_append_data`函数和`ip_append_page`函数创建的输出队列发送出去
 * `dst_output`函数是一个函数指针，它指向`ip_output`函数
