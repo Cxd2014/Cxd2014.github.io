@@ -16,12 +16,10 @@ tags: linux kernel list 内核链表
 linux内核定义的链表结构不带数据域，只需要两个指针完成链表的操作。将链表节点加入数据结构，具备非常高的扩展性，通用性。
 
 ```c
-
 /* include/linux/types.h */
 struct list_head {
 	struct list_head *next, *prev;
 };
-
 ```
 
 #### 初始化链表 
