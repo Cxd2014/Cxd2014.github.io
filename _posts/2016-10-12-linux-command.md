@@ -79,3 +79,27 @@ Shift键 + : | 进入尾行模式（在命令行模式下）
         grep -rn "main" ./ --exclude-dir ac_cloud
     ```
 
+### tcpdump命令
+
+命令|解释
+---|---
+`tcpdump -i eth3` | 抓取指定网卡的数据包
+`tcpdump -i eth3 host 192.168.42.1` | 抓取指定IP地址的数据包
+`tcpdump -i eth3 port 1111` | 抓取指定端口号的数据包
+`tcpdump -i eth3 host 192.168.42.1 and port 1111` | 抓取地址IP地址和端口号的数据包
+`tcpdump -i eth3 udp`  | 抓取UDP/TCP协议的数据包
+`tcpdump -i eth3 udp port 1111` | 抓取UDP协议并指定端口号
+`tcpdump -i eth3 udp -c 10` | 抓取10个UDP协议的数据包
+`tcpdump -i eth3 udp -w ./data.cap` | 抓取UDP协议数据并输出为Wireshark格式的文件  
+
+注：按`ctrl + c`结束抓取数据包，并保存数据
+
+### ifconfig命令
+
+命令|解释
+---|---
+ifconfig eth3 up   | 启动eth3网卡
+ifconfig eth3 down | 关闭eth3网卡
+ifconfig eth3 192.168.1.123 | 修改IP地址
+ifconfig eth3 192.168.1.123 netmask 255.255.255.0 | 修改IP地址和子网掩码
+ifconfig eth3 hw ether 00:AA:BB:CC:dd:EE | 修改MAC地址
