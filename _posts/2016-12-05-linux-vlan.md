@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Linux中网桥设备的实现"
+title:  "Linux中VLAN设备的实现"
 date:   2016-12-05 10:20:10
 categories: network
 tags: linux vlan
