@@ -1,13 +1,21 @@
 ﻿---
+
 layout: post
 title:  "Linux文件系统"
 date:   2017-02-15 10:20:10
 categories: linux
 tags: linux vfs filesystem
+
 ---
 
 * content
 {:toc}
+
+### 前言
+
+本篇文章是翻译于：
+
+[The File system](http://www.tldp.org/LDP/tlk/fs/filesystem.html)
 
 ### Linux文件系统
 
@@ -524,11 +532,7 @@ $ brw-rw----   1 root    disk       3,    1  Nov 24  15:09 /dev/hda1
 当VFS读取此节点时，VFS数据结构中的`i_rdev`字段被设置为正确的设备标识符。
 
 
-[The File system](http://www.tldp.org/LDP/tlk/fs/filesystem.html)
+### 参考
 
 [ext2文件系统解构探析](http://molinux.blog.51cto.com/2536040/505485)
-
-
-
-
 
