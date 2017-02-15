@@ -1,11 +1,9 @@
 ﻿---
-
 layout: post
 title:  "Linux文件系统"
 date:   2017-02-15 10:20:10
 categories: linux
 tags: linux vfs filesystem
-
 ---
 
 * content
@@ -99,6 +97,8 @@ EXT2文件系统将它管理的逻辑分区分成多个块组。
 
 ### EXT2文件系统的`inode`节点
 
+![ext2_inode]({{"/css/pics/filesystem/ext2_inode.gif"}})
+
 图 9.2： EXT2文件系统的`inode`节点
 
 在EXT2文件系统中，`inode`节点是最基本的元素；每个文件和目录都使用一个且唯一一个`inode`节点来描述。
@@ -163,7 +163,7 @@ EXT2文件系统将它管理的逻辑分区分成多个块组。
 
 ### EXT2文件系统的目录
 
-![ext2_inode]({{"/css/pics/filesystem/ext2_inode.gif"}})
+![ext2_dir]({{"/css/pics/filesystem/ext2_dir.gif"}})
 
 图 9.3: EXT2文件系统的目录
 
@@ -323,7 +323,7 @@ VFS将所有被挂在的文件系统和它们的VFS超级块组成一个列表�
 
 ![file-systems]({{"/css/pics/filesystem/file-systems.gif"}})
 
-图 9.4：文件系统的注册
+图 9.5：文件系统的注册
 
 当编译Linux内核的时候会询问你是否支持每个文件系统，当内核编译完成，文件系统的启动代码中包含被编译进去的文件系统的初始化函数调用。
 
