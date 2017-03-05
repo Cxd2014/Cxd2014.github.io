@@ -20,7 +20,7 @@
         core_tech: 'Linux驱动',
         description: '韦东山老师的教程写的Linux驱动'
     },{
-        demo_link: 'http://pan.baidu.com/s/1skcRIVj',
+        demo_link: 'https://www.gitbook.com/book/cxd2014/an_introduction_to_gcc/details',
         img_link: '/css/4566.jpg',
         code_link: 'https://www.gitbook.com/book/cxd2014/an_introduction_to_gcc/details',
         title: 'An_introduction_to_GCC中文版',
