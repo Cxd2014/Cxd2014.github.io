@@ -18,6 +18,7 @@ svn co serverUrl | 到serverUrl服务器上下载代码
 svn commit -m "log" filename | 将文件filename上传到服务器，"log"为修改日志
 svn up -r versionNum | 回到指定版本号versionNum
 svn revert filename | 恢复被删除的文件
+svn diff filename | 查看文件的修改内容
 svn log -r versionNum | 查看versionNum版本号下的修改日志记录
 svn log -v . -r versionNum | 查看versionNum版本号下修改了哪些文件和日志记录
 svn log --username name | 查看name用户所有上传的日志记录
