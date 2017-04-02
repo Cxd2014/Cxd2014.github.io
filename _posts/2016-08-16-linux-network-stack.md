@@ -91,3 +91,77 @@ tags: TCP/IP 网络栈 协议栈
 过大的数据包导致延迟增大的问题称为`Bufferbloat`。更多的细节请看[Controlling Queue Delay ](http://queue.acm.org/detail.cfm?id=2209336)和[Bufferbloat](http://www.bufferbloat.net/)项目。
 
 根据上面的讨论，选择一个合适大小的环形缓冲区是一个`度`的问题--不能太小会降低吞吐量，也不能太大会增大延迟时间。
+
+### Byte Queue Limits (BQL)
+
+BQL是Linux内核中的新特性（内核版本大于3.3.0），用于自动调整驱动队列的大小。
+它在当前的系统环境下通过计算避免饥饿发生的缓冲区最小值来允许和禁止数据包进入驱动队列。
+前面提到过队列中的数据包越少，数据包的延迟越小。
+
+需要注意的是BQL并不会改变驱动队列的实际大小，它只是计算出一个值来限制当前时间下进入队列中的最大数据量（单位是字节）。
+任何超过这个限制的数据必须被驱动队列的上层缓存或者丢弃。
+
+当数据包加入到驱动队列和数据包的发送完成时BQL开始运行。下面是BQL算法简化版本的伪代码，`LIMIT`的值是BQL计算出来的。
+
+```
+****
+** After adding packets to the queue
+****
+
+if the number of queued bytes is over the current LIMIT value then
+        disable the queueing of more data to the driver queue
+```
+
+注意队列中的数据量可以大于`LIMIT`，因为数据包在检查`LIMIT`限制之前加入队列。
+当吞吐量优化机制TSO、UFO或者GSO被使能时会有副作用，因为一次入队操作可能会加入一个很大的数据包。
+如果你非常关注延迟你可以把这些机制禁用掉。本文的下面章节会介绍怎样禁用这些机制。
+
+BQL运行的第二个阶段是当硬件完成数据包的发送时（伪代码如下）：
+```
+****
+** When the hardware has completed sending a batch of packets
+** (Referred to as the end of an interval)
+****
+
+if the hardware was starved in the interval
+        increase LIMIT
+
+else if the hardware was busy during the entire interval (not starved) and there are bytes to transmit
+        decrease LIMIT by the number of bytes not transmitted in the interval
+
+if the number of queued bytes is less than LIMIT
+        enable the queueing of more data to the buffer
+```
+
+你可以看到BQL是根据检查设备是否饥饿来设置`LIMIT`的值。
+一个现实中的例子可以帮助理解BQL的作用效果。我的一个服务器上的队列大小默认是256个描述符。
+因为以太网的MTU是1500字节，所以驱动队列最大可以缓存`256 * 1500 = 384000`字节的数据
+（TSO、GSO等被禁用否则这个值会更大）。但是BQL计算出来的限制值为`3012`字节，
+你可以看到BQL限制了大量的数据进入队列。
+
+BQL之所以使用字节而不像驱动队列和其他大多数包队列那样使用数据包，
+是因为字节数比数据包可以更直接的反应当前时间物理设备需要发送的数据量。
+BQL通过限制驱动队列中的数据量来减少延迟。这样也会有一个很大的副作用就是将数据包从简单的FIFO驱动
+队列转移到更复杂的`QDisc`队列中去了。下一章节将会介绍Linux中的`QDisc`层。
+
+### Queuing Disciplines (QDisc)
+
+驱动队列是一个简单的先进先出队列，它对待每个数据包都是公平的不会区分哪个包属于哪个流，
+这种设计使得NIC驱动非常简单高效。需要注意的是很多高级以太网卡和大多数无线网卡支持多个发送队列
+但是每个队列也都是FIFO队列，由驱动队列的上一层来决定使用哪个队列发送数据。
+
+IP协议栈和驱动队列之间有一个规则队列（QDisc）层。该层实现了Linux内核的流量管理功能，包括流量分类，优先级排序和整流功能，QDisc层通过`tc`命令来配置。QDisc层中需要理解三个关键概念：队列、类和过滤。
+
+QDisc是Linux抽像出来的流控队列，它比FIFO队列要复杂很多。它可以在不改变IP协议栈和NIC驱动的情况下实现
+复杂队列管理功能。默认情况下每个网卡分配了一个[pfifo_fast](http://lartc.org/howto/lartc.qdisc.classless.html)队列，他根据TOS字段的值实现了三个不同的优先级。
+尽管`pfifo_fast`是默认队列，但是它不是最好的选择因为他不进行流识别而且队列非常长。
+
+QDisc的第二个概念是类。某些QDisc可以分成不同的类来实现不同的流控功能。例如令牌桶（HTB）队列允许
+用户配置`500Kbps`和`300Kbps`两类来分别进行流量控制。不是所有QDisc都支持多个类。
+
+过滤（也叫做分类器）是将不同数据包分配到特定队列或类的机制。过滤器有很多种并且都非常复杂。
+[u32](http://www.lartc.org/lartc.html#LARTC.ADV-FILTER.U32)是最常见易用的过滤器。
+关于流过滤的文档非常少但是你可以参考一下这个例子[one of my QoS scripts](http://lartc.org/howto/lartc.qdisc.classless.html)。
+
+关于QDiscs的更多细节可以查看[LARTC HOWTO](http://www.lartc.org/howto/)和`tc`命令的帮助文档。
+
