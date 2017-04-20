@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "一张图呈现Linux内核全貌"
-date:   2017-04-01 10:20:10
+date:   2017-03-20 10:20:10
 categories: linux
 tags: linux map 
 ---
@@ -17,4 +17,5 @@ tags: linux map
 
 原网站在这：[MakeLinux](http://www.makelinux.net/kernel_map/)
 
-![linux-kernel-map]({{"/css/pics/linux-kernel-map.png"}})   
+![linux-kernel-map]({{"/css/pics/linux-kernel-map.png"}})  
+
