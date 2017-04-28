@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "一张图呈现Linux内核全貌"
-date:   2017-03-20 10:20:10
+date:   2017-04-01 10:20:10
 categories: linux
 tags: linux map 
 ---
