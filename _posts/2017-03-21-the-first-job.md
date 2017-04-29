@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Linux内核全貌"
+title:  "告别我的第一份工作"
 date:   2017-03-20 10:20:10
 categories: linux
 tags: linux map 
