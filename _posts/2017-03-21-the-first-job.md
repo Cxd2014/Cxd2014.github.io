@@ -2,8 +2,8 @@
 layout: post
 title:  "告别我的第一份工作"
 date:   2017-03-20 10:20:10
-categories: linux
-tags: linux map 
+categories: life
+tags: first job
 ---
 
 * content
