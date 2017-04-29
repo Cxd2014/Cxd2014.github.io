@@ -15,49 +15,49 @@
     var demoContent = [{
         demo_link: 'https://github.com/Cxd2014/LinuxDriversLearn',
         img_link: '/css/linux.jpg',
-        code_link: 'https://github.com/Cxd2014/LinuxDriversLearn',
+        //code_link: 'https://github.com/Cxd2014/LinuxDriversLearn',
         title: 'Linux驱动学习',
         core_tech: 'Linux驱动',
         description: '韦东山老师的教程写的Linux驱动'
     },{
         demo_link: 'https://www.gitbook.com/book/cxd2014/an_introduction_to_gcc/details',
         img_link: '/css/4566.jpg',
-        code_link: 'https://www.gitbook.com/book/cxd2014/an_introduction_to_gcc/details',
+        //code_link: 'https://www.gitbook.com/book/cxd2014/an_introduction_to_gcc/details',
         title: 'An_introduction_to_GCC中文版',
         core_tech: 'GCC',
         description: 'An_introduction_to_GCC中文翻译版本'
     },{
         demo_link: 'https://github.com/Cxd2014/Qt-Application',
         img_link: '/css/4056.jpg',
-        code_link: 'https://github.com/Cxd2014/Qt-Application',
+        //code_link: 'https://github.com/Cxd2014/Qt-Application',
         title: 'Qt应用程序',
         core_tech: 'C++ Qt',
         description: '用Qt Designer写的小程序'
     },{
         demo_link: 'https://github.com/Cxd2014/DataStruct',
         img_link: '/css/1234.jpg',
-        code_link: 'https://github.com/Cxd2014/DataStruct',
+        //code_link: 'https://github.com/Cxd2014/DataStruct',
         title: 'C语言版数据结构',
         core_tech: 'C 数据结构',
         description: 'C语言版数据结构'
     },{
         demo_link: 'http://v.youku.com/v_show/id_XMTYyMDE2NDcwOA==.html',
         img_link: '/css/1.png',
-        code_link: 'http://v.youku.com/v_show/id_XMTYyMDE2NDcwOA==.html',
+        //code_link: 'http://v.youku.com/v_show/id_XMTYyMDE2NDcwOA==.html',
         title: '毕业相册',
         core_tech: '毕业相册',
         description: '大学毕业电子相册'
     },{
         demo_link: 'http://v.youku.com/v_show/id_XNzk2MDc4NTEy.html',
         img_link: '/css/2.jpg',
-        code_link: 'http://v.youku.com/v_show/id_XNzk2MDc4NTEy.html',
+        //code_link: 'http://v.youku.com/v_show/id_XNzk2MDc4NTEy.html',
         title: '穿墙术',
         core_tech: 'AE特效之穿墙',
         description: 'AE特效之穿墙'
     },{
         demo_link: 'http://v.youku.com/v_show/id_XOTE2OTM3NTc2.html',
         img_link: '/css/3.jpg',
-        code_link: 'http://v.youku.com/v_show/id_XOTE2OTM3NTc2.html',
+        //code_link: 'http://v.youku.com/v_show/id_XOTE2OTM3NTc2.html',
         title: '分身术',
         core_tech: 'AE特效之分身术',
         description: 'AE特效之分身术'
@@ -73,25 +73,10 @@
  * @return {[type]} [description]
  */
 function contentInit(content) {
-  // var htmlArr = [];
-  // for (var i = 0; i < content.length; i++) {
-  //     htmlArr.push('<div class="grid-item">')
-  //     htmlArr.push('<a class="a-img" href="'+content[i].demo_link+'">')
-  //     htmlArr.push('<img src="'+content[i].img_link+'">')
-  //     htmlArr.push('</a>')
-  //     htmlArr.push('<h3 class="demo-title">')
-  //     htmlArr.push('<a href="'+content[i].demo_link+'">'+content[i].title+'</a>')
-  //     htmlArr.push('</h3>')
-  //     htmlArr.push('<p>主要技术：'+content[i].core_tech+'</p>')
-  //     htmlArr.push('<p>'+content[i].description)
-  //     htmlArr.push('<a href="'+content[i].code_link+'">源代码 <i class="fa fa-code" aria-hidden="true"></i></a>')
-  //     htmlArr.push('</p>')
-  //     htmlArr.push('</div>')
-  // }
-  // var htmlStr = htmlArr.join('')
   var htmlStr = ''
   for (var i = 0; i < content.length; i++) {
-    htmlStr += '<div class="grid-item">' + '   <a class="a-img" href="' + content[i].demo_link + '">' + '       <img src="' + content[i].img_link + '">' + '   </a>' + '   <h3 class="demo-title">' + '       <a href="' + content[i].demo_link + '">' + content[i].title + '</a>' + '   </h3>' + '   <p>主要技术：' + content[i].core_tech + '</p>' + '   <p>' + content[i].description + '       <a href="' + content[i].code_link + '">源代码 <i class="fa fa-code" aria-hidden="true"></i></a>' + '   </p>' + '</div>'
+    htmlStr += '<div class="grid-item">' + '   <a class="a-img" href="' + content[i].demo_link + '">' + '       <img src="' + content[i].img_link + '">' + '   </a>' + '   <h3 class="demo-title">' + 
+    '       <a href="' + content[i].demo_link + '">' + content[i].title + '</a>' + '   </h3>' + '   <p>主要技术：' + content[i].core_tech + '</p>' + '   <p>' + content[i].description + '   </p>' + '</div>'
   }
   var grid = document.querySelector('.grid')
   grid.insertAdjacentHTML('afterbegin', htmlStr)
