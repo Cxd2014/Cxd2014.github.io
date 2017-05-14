@@ -13,7 +13,7 @@ tags: gdb core dump
 
 在Ubuntu中执行`ulimit -a`命令，查看`core file size`的值，如果为`0`说明系统默认不会产生core文件,需要执行`ulimit -c 1024`指定core文件的大小。系统生成的core文件一般存放在程序当前执行的目录下。如图：
 
-![core-dump-1]({{"/css/coredump/core-dump-1.jpg"}})  
+![core-dump-1]({{"/css/pics/coredump/core-dump-1.jpg"}})  
 
 ### 测试程序
 
@@ -58,8 +58,8 @@ int main()
 
 * 执行`info locals`查看当前栈帧中函数的局部变量，如图：
 
-	![core-dump-2]({{"/css/coredump/core-dump-2.jpg"}})  
+	![core-dump-2]({{"/css/pics/coredump/core-dump-2.jpg"}})  
 
 注：如果源文件也在当前目录下还可以查看函数的代码，如图：
 
-![core-dump-3]({{"/css/coredump/core-dump-3.jpg"}})  
+![core-dump-3]({{"/css/pics/coredump/core-dump-3.jpg"}})  
