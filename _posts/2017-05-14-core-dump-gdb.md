@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "GDB调试core dump文件"
-date:   2017-04-15 10:20:10
+date:   2017-05-14 10:20:10
 categories: others
 tags: gdb core dump
 ---
