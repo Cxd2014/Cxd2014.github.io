@@ -227,7 +227,7 @@ resolve_normal_ct(struct net *net, struct nf_conn *tmpl,
 
 既然有创建连接跟踪的地方，那就肯定有销毁连接跟踪的地方，不然内核就发生内存泄漏了。连接跟踪的销毁是在`/net/netfilter/nf_conntrack_core.c`文件中的`gc_worker`函数中实现的，这个函数是个定时执行的函数，它首先会遍历整个hash表，然后通过检查一些标记来确定该连接是否可以被回收，例如一个最明显的标记就是`timeout`超时时间。最后调用`nf_ct_put`函数来进行实际的销毁动作。
 
-#### 参考
+### 参考
 
 [Netfilter’s connection tracking system](http://people.netfilter.org/pablo/docs/login.pdf)   
 基于Linux-4.12.1内核源码分析
