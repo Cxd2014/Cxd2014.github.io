@@ -3,7 +3,7 @@ layout: post
 title:  "Linux中的连接跟踪源码分析"
 date:   2017-08-15 10:10:10
 categories: network
-tags: connection tracking system
+tags: Linux connection tracking system
 ---
 
 * content
@@ -154,7 +154,16 @@ out:
 }
 ```
 
-`resolve_normal_ct`函数首先会获取该数据包的五元组信息，然后通过这个信息计算出hash值，通过这个hash值在hash表中查找，如果没有找到则调用`init_conntrack`函数创建一个新的连接跟踪，最后调用`nf_ct_set`函数设置此数据包的连接跟踪标记。这里要特别强调一下这个标记，`nf_ct_set`函数中只有一行代码：`skb->_nfct = (unsigned long)ct | info;`可以看到他将`ct`这个结构体指针和`info`这个枚举类型同时放在了一个`unsigned long`类型的变量中，`info`这个枚举类型占最后3个bit，`ct`结构体占用剩下的所有bit位。这意味着`ct`这个结构体指针地址最低是8字节对齐的，才能留下3个空闲bit位用于存放`info`枚举类型。这种操作我估计也只有玩内核的大神才能想得出来。。。
+`resolve_normal_ct`函数首先会获取该数据包的五元组信息，然后通过这个信息计算出hash值，通过这个hash值在hash表中查找，如果没有找到则调用`init_conntrack`函数创建一个新的连接跟踪，要注意在创建连接跟踪的时候会同时创建两个方向的连接一个，一个是原始方向的称为`IP_CT_DIR_ORIGINAL`，另外一个是回复方向的称为`IP_CT_DIR_REPLY`，这样当此条连接的回复报文过来后就可以很快确认数据包属于哪条连接。回复方向的连接是在`init_conntrack`函数中调用`nf_ct_invert_tuple`函数创建的。最后调用`nf_ct_set`函数设置此数据包的连接跟踪标记。
+
+```
+示例：
+原始方向：tuplehash[IP_CT_DIR_ORIGINAL] = {192.168.0.1:12345,111.13.101.208:80,TCP}
+则回复方向为：tuplehash[IP_CT_DIR_REPLY] = {111.13.101.208:80,192.168.0.1:12345,TCP}
+特别注意：当连接跟踪和NAT一起使用时，这里的五元组信息会改变，等下次分析NAT时，在来讨论这个问题。
+```
+
+这里要特别强调一下这个标记，`nf_ct_set`函数中只有一行代码：`skb->_nfct = (unsigned long)ct | info;`可以看到他将`ct`这个结构体指针和`info`这个枚举类型同时放在了一个`unsigned long`类型的变量中，`info`这个枚举类型占最后3个bit，`ct`结构体占用剩下的所有bit位。这意味着`ct`这个结构体指针地址最低是8字节对齐的，才能留下3个空闲bit位用于存放`info`枚举类型。这种操作我估计也只有玩内核的大神才能想得出来。。。
 
 ```c
 /* On success, returns 0, sets skb->_nfct | ctinfo */
