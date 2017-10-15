@@ -92,50 +92,50 @@ NAPI模型中的中断函数将数据帧传送到协议栈的任务交给`poll`�
 从`net_rx_action`函数的实现中我们可以看到当`weight`的值设置太大时，驱动使用的`budget`或超过`quantum`，此时会导致一个轮询周期的时间变长。
 
 在清单 2中我们给出了设备驱动程序接收中断并执行轮询函数的伪代码：
-```C
+```c
 static irqreturn_t sample_netdev_intr(int irq, void *dev)
- {
+{
     struct net_device *netdev = dev;
     struct nic *nic = netdev_priv(netdev);
 
     if (! nic->irq_pending())
-       return IRQ_NONE;
- 
+        return IRQ_NONE;
+
     /* Ack interrupt(s) */
     nic->ack_irq();
 
     nic->disable_irq();  
 
     netif_rx_schedule(netdev);
-  
+
     return IRQ_HANDLED;
-  }
+}
 
  
-  static int sample_netdev_poll(struct net_device *netdev, int *budget)
-  {
-     struct nic *nic = netdev_priv(netdev);
+static int sample_netdev_poll(struct net_device *netdev, int *budget)
+{
+    struct nic *nic = netdev_priv(netdev);
 
-     unsigned int work_to_do = min(netdev->quota, *budget);
-     unsigned int work_done = 0;
-   
-     nic->announce(&work_done, work_to_do);
-   
-     /* If no Rx announce was done, exit polling state. */
+    unsigned int work_to_do = min(netdev->quota, *budget);
+    unsigned int work_done = 0;
 
-     if(work_done == 0) || !netif_running(netdev)) {
+    nic->announce(&work_done, work_to_do);
 
-        netif_rx_complete(netdev);
-        nic->enable_irq();  
+    /* If no Rx announce was done, exit polling state. */
 
-        return 0;
-     }
- 
-     *budget -= work_done;
-     netdev->quota -= work_done;
- 
-     return 1;
-  }
+    if(work_done == 0) || !netif_running(netdev)) {
+
+    netif_rx_complete(netdev);
+    nic->enable_irq();  
+
+    return 0;
+    }
+
+    *budget -= work_done;
+    netdev->quota -= work_done;
+
+    return 1;
+}
 ```
 图3、图4分别展示了非NAPI和NAPI模型中数据包接收处理过程的时序图：   
 ![a8_fig3_en]({{"/css/pics/napi/a8_fig3_en.jpg"}})   
