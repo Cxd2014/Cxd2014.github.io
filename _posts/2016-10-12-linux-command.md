@@ -80,6 +80,17 @@ Shift键 + : | 进入尾行模式（在命令行模式下）
         grep -rn "main" ./ --exclude-dir ac_cloud
     ```
 
+6. 将所有文件中的"LOGDEBUG"字符串替换为"LOGDEBUG_CXD"
+
+    ```
+    sed -i s/LOGDEBUG/LOGDEBUG_CXD/g `grep LOGDEBUG -rl --include="*.cpp" ./`
+    ```
+7. 批量将文件后缀为".cc"修改为".cpp"
+
+    ```
+    rename 's/\.cc/\.cpp/' * `find . -name "*.cc"`
+    ```
+
 ### tcpdump命令
 
 命令|解释
