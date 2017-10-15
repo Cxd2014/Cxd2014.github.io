@@ -76,9 +76,9 @@ NAPI模型中的中断函数将数据帧传送到协议栈的任务交给`poll`�
 2. 将`jiffies`的值保存在`start_time`变量中。
 3. 设置轮询的`budget`（预算，可处理的数据包数量）为`netdev_budget`变量的初始值（这个值可以通过`/proc/sys/net/core/netdev_budget`来配置）
 4. 轮询`poll_list`链表中的每个设备，直到你的`budget`用完，当你的运行时间还没有超过一个`jiffies`然后:   
-    a) 如果`quantum`（配额）为正值则调用设备的`poll()`函数，否则将`weight`的值加到`quantum`中，将设备放回`poll_list`链表；
-    a.1) 如果`poll()`函数返回一个非零值，将`weight`的值设置到`quantum`中然后将设备放回`poll_list`链表；
-    a.2) 如果`poll()`函数返回零值，说明设备已经被移除`poll_list`链表（不再处于轮询状态）。
+    a) 如果`quantum`（配额）为正值则调用设备的`poll()`函数，否则将`weight`的值加到`quantum`中，将设备放回`poll_list`链表；   
+    a.1) 如果`poll()`函数返回一个非零值，将`weight`的值设置到`quantum`中然后将设备放回`poll_list`链表；   
+    a.2) 如果`poll()`函数返回零值，说明设备已经被移除`poll_list`链表（不再处于轮询状态）。   
 
 `budget`的值和`net_device`结构体的指针会传递到`poll()`函数中。`poll()`函数应该根据数据帧的处理数量来减小`budget`的值。数据帧从网络设备的缓冲区中复制出来包装在`socket buffers`中，然后通过`netif_receive_skb`函数传递到协议栈中去。
 
