@@ -27,6 +27,13 @@
         core_tech: 'GCC',
         description: 'An_introduction_to_GCC中文翻译版本'
     },{
+        demo_link: 'https://github.com/Cxd2014/lua_epoll_server',
+        img_link: '/css/54542.jpg',
+        //code_link: 'https://www.gitbook.com/book/cxd2014/an_introduction_to_gcc/details',
+        title: '基于Lua的HTTP服务器',
+        core_tech: 'epoll lua HTTP服务器',
+        description: '基于Lua的HTTP服务器'
+    },{
         demo_link: 'https://github.com/Cxd2014/Qt-Application',
         img_link: '/css/4056.jpg',
         //code_link: 'https://github.com/Cxd2014/Qt-Application',
