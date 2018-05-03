@@ -34,13 +34,17 @@ type: page
 2015.08.10 | 在 Git 上搭建此博客
 2016.06.10 | 大学毕业
 2017.04.14 | 腾达 第一份工作的结束
+2018.03.19 | 深信服 第二份工作的结束
 
+
+本人目前就职于腾讯，从事QQ的Linux后台开发，目前QQ后台大量招人，感兴趣的同学可以把简历发给我内推。   
+邮件：374530430@qq.com
 
 ---
 
 
 ### 本人其他站点
 
-[虾米音乐](http://www.xiami.com/space/lib-song/u/36002852?spm=a1z1s.6626009.229054153.3.7v3L46) \| [CSDN](http://blog.csdn.net/u014328976/article) \| [博客园](http://www.cnblogs.com/cxd2014/p/) \| [Facebook](https://www.facebook.com/profile.php?id=100006606157322) \| [知乎](http://www.zhihu.com/people/cheng-sheng-92) \| [豆瓣](http://www.douban.com/people/81914486/) \| [优酷](http://i.youku.com/i/UMTQ0ODkzMTAzMg==/videos)
+[虾米音乐](http://www.xiami.com/space/lib-song/u/36002852?spm=a1z1s.6626009.229054153.3.7v3L46) \| [CSDN](http://blog.csdn.net/u014328976/article) \| [博客园](http://www.cnblogs.com/cxd2014/p/) \| [Facebook](https://www.facebook.com/profile.php?id=100006606157322) \| [知乎](http://www.zhihu.com/people/cheng-sheng-92) \| [豆瓣](http://www.douban.com/people/81914486/) \| [优酷](http://i.youku.com/i/UMTQ0ODkzMTAzMg==/videos) \| [图虫](https://tuchong.com/1374882/)
 
 {% include comments.html %}
