@@ -1,9 +1,9 @@
 ---
 layout: post
 title:  "C++11语言学习"
-date:   2018-03-07 10:20:10
-categories: life
-tags: life
+date:   2018-05-03 10:20:10
+categories: programming
+tags: C++11
 ---
 
 * content
