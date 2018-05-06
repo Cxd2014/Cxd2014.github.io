@@ -68,7 +68,14 @@
         title: '分身术',
         core_tech: 'AE特效之分身术',
         description: 'AE特效之分身术'
-    }
+    },{
+      demo_link: 'https://www.bilibili.com/video/av23025158',
+      img_link: '/css/20180506102058.jpg',
+      //code_link: 'http://v.youku.com/v_show/id_XOTE2OTM3NTc2.html',
+      title: '大范围移动延时摄影-深圳',
+      core_tech: '延时摄影',
+      description: '延时摄影'
+  }
   ];
 
   contentInit(demoContent) //内容初始化
