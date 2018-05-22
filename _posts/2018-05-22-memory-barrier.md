@@ -9,16 +9,14 @@ tags: Memory barrier mfence
 * content
 {:toc}
 
+
 ### 关于内存屏障的实验
-
-注：这边文章是翻译自[Memory Reordering Caught in the Act](http://preshing.com/20120515/memory-reordering-caught-in-the-act/)。最近想了解一下无锁队列的实现原理，遇到的第一个困难就是这个内存屏障，大多数文章中只是介绍了一下内存屏障的概念，对于我这种小白来说还是不能真正理解什么是内存屏障，然后在网上看到这篇文章，他通过写代码来测试内存屏障，觉得很不错遂决定翻译下来，顺便好好理解一下这篇文章。
-
 
 当我们使用C或者C++编写`lock-free`（无锁）代码时，一定要特别注意内存读写顺序的正确性，不然会有意想不到的事情发生。
 
 Intel在[x86/64 Architecture Specification](https://software.intel.com/en-us/articles/intel-sdm?iid=tech_vt_tech+64-32_manuals)开发者手册中列举了几种这样的情况。下面是其中一个最简单的例子：假设内存中有两个整型变量`x`和`y`，初始值都为0，有两个CPU核心并行执行下面的代码：   
 
-![code]({{"/css/pics/marked-example2.png"}})
+![code]({{"/css/pics/memory_barrier/marked-example2.png"}})
 
 不要在意示例中的代码是汇编语言，这是展示CPU指令执行顺序的最好方法。代码的逻辑是：每个CPU核心都往一个整型变量中存放数字1，然后加载另外一个变量到寄存器中。   
 
@@ -28,7 +26,7 @@ Intel在[x86/64 Architecture Specification](https://software.intel.com/en-us/art
 出现这种情况的原因是Intel x86/64处理器和大多数处理器系列一样，支持按照一定规则对机器指令和内存之间的交互重新排序执行，只要不改变单线程的执行顺序就行。
 特别是允许处理器延迟写内存，结果导致指令执行的顺序可以是下面这种情况：
 
-![code]({{"/css/pics/reordered.png"}})
+![code]({{"/css/pics/memory_barrier/reordered.png"}})
 
 ### 我们来复现这种情况
 
@@ -119,14 +117,14 @@ int main()
 
 下面展示的是Cygwin在Intel Xeon W3520处理器上运行的结果：
 
-![code]({{"/css/pics/cygwin-output.png"}})
+![code]({{"/css/pics/memory_barrier/cygwin-output.png"}})
 
 从上面的结果中可以看到，大约每6600次循环就会出现一次乱序执行的问题。当我在Ubuntu Core 2 Duo E6300处理器上测试时出现的概率更低。
 可以想象这种Bug是多么难以发现。
 
 译者测试的环境是Ubuntu Intel(R) Core(TM) i7-6700处理器vm虚拟机上的运行结果：
 
-![code]({{"/css/pics/linux.png"}})
+![code]({{"/css/pics/memory_barrier/linux.png"}})
 
 那该怎么解决这个问题了？至少有两种方法可以解决它。第一种方法是设置工作线程的亲和性，使两个线程运行在同一个CPU核心上。
 这种方法不具备可移植性，但是在Linux上面我们可以这样设置线程的亲和性：
@@ -355,3 +353,6 @@ int main()
 编译：
 gcc -o ordering -O2 ordering.cpp -lpthread
 ```
+
+### 译者注
+这边文章是翻译自[Memory Reordering Caught in the Act](http://preshing.com/20120515/memory-reordering-caught-in-the-act/)。最近想了解一下无锁队列的实现原理，遇到的第一个困难就是这个内存屏障，大多数文章中只是介绍了一下内存屏障的概念，对于我这种小白来说还是不能真正理解什么是内存屏障，然后在网上看到这篇文章，他通过写代码来测试内存屏障，觉得很不错遂决定翻译下来，顺便好好理解一下这篇文章。
