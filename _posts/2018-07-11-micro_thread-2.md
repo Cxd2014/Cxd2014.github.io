@@ -285,46 +285,46 @@ tags: micro thread
 在回过头去看`InitContext`函数，当恢复微线程上下文之后，从`save_context`函数之后继续执行，首先他会判断返回值，如果不等于0则调用`ScheduleStartRun`执行任务函数，
 所以这里有两种情况，保存上下文的时候`save_context`返回0继续往下执行，恢复上下文的时候返回1，进入`if`语句内执行任务。
 
-    ```c
-    void Thread::RestoreContext()
+```c
+void Thread::RestoreContext()
+{
+    restore_context(_jmpbuf, 1);    
+}
+
+void Thread::InitContext()
+{
+
+    if (save_context(_jmpbuf) != 0)
     {
-        restore_context(_jmpbuf, 1);    
+        /* 当初始化好的微线程被调度执行时，会走到这里 */
+        ScheduleObj::Instance()->ScheduleStartRun(); // 直接调用 this->run?
     }
-
-    void Thread::InitContext()
+    
+    if (_stack != NULL)
     {
-
-        if (save_context(_jmpbuf) != 0)
-        {
-            /* 当初始化好的微线程被调度执行时，会走到这里 */
-            ScheduleObj::Instance()->ScheduleStartRun(); // 直接调用 this->run?
-        }
-        
-        if (_stack != NULL)
-        {
-            replace_esp(_jmpbuf, _stack->_esp);
-        }
+        replace_esp(_jmpbuf, _stack->_esp);
     }
+}
 
-    ##
-    #  @brief restore_context
-    ##
-        .text
-        .align 4
-        .globl restore_context
-        .type restore_context, @function
-    restore_context:
-        movl %esi,%eax			# 设置第二个参数1为返回值
-        movq (%rdi),%rbx
-        movq 8(%rdi),%rsp
-        movq 16(%rdi),%rbp
-        movq 24(%rdi),%r12
-        movq 32(%rdi),%r13
-        movq 40(%rdi),%r14
-        movq 48(%rdi),%r15
-        jmp *56(%rdi)
+##
+#  @brief restore_context
+##
+    .text
+    .align 4
+    .globl restore_context
+    .type restore_context, @function
+restore_context:
+    movl %esi,%eax			# 设置第二个参数1为返回值
+    movq (%rdi),%rbx
+    movq 8(%rdi),%rsp
+    movq 16(%rdi),%rbp
+    movq 24(%rdi),%r12
+    movq 32(%rdi),%r13
+    movq 40(%rdi),%r14
+    movq 48(%rdi),%r15
+    jmp *56(%rdi)
 
-        .size restore_context,.-restore_context
-    ```
+    .size restore_context,.-restore_context
+```
 
 
