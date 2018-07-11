@@ -141,7 +141,72 @@ tags: micro thread
 
 微线程框架中有两种方式来执行任务：
 
-1. 创建一个任务队列，将所有实例化好的任务全部加入到任务队列中，然后调用`mt_exec_all_task`函数执行所有任务，任务队列中的任务是并行的执行的，
+1. 实例化一个任务，然后直接调用任务中的`Process()`函数来执行，这种任务的执行方式是串行的，当此任务执行完成之后，才能继续往下执行。
+如果遇到网络IO操作被阻塞时，微线程框架会将当前操作的套接字句柄加入到监听队列，然后调度其他微线程执行，将此微线程加入到等待队列；
+
+    ```c++
+    /* 网络IO操作被阻塞时都会调用此函数来调度切换微线程 */
+    bool MtFrame::EpollSchedule(EpObjList* fdlist, EpollerObj* fd, int timeout)
+    {
+        MicroThread* thread = GetActiveThread();
+        if (NULL == thread)
+        {
+            MTLOG_ERROR("active thread null, epoll schedule failed");
+            return false;
+        }
+
+        // 1. 整合该线程需要关心的epoll调度对象，将套接字加入到监听队列
+        thread->ClearAllFd();
+        if (fdlist) 
+        {
+            thread->AddFdList(fdlist);
+        }
+        if (fd) 
+        {
+            thread->AddFd(fd);
+        }
+
+        // 2. 设置epoll监听事件, 调整超时时间, 切换IO等待状态, 触发切换
+        thread->SetWakeupTime(timeout + this->GetLastClock());
+        if (!this->EpollAdd(thread->GetFdSet()))
+        {
+            MTLOG_ERROR("epoll add failed, errno: %d", errno);
+            return false;
+        }
+
+        /* 将当前线程加入到等待队列，调用 SwitchContext 函数，进行微线程上下文的切换
+         * 首先是调用上文中提到的汇编函数 save_context 来保存当前线程的上下文，
+         * 然后调用 restore_context 汇编函数来恢复下一个要运行的微线程的上下文，
+         * 恢复上下文的操作主要是将_jmpbuf数组中的内容恢复到对应的寄存器中
+         */
+        this->InsertIoWait(thread); 
+        thread->SwitchContext();
+
+        /* 当有事件发生或者超时，微线程再次被调度时从这里继续执行 */
+        // 3. 调度OK, 判定超时, epoll ctrl 还原状态
+        int rcvnum = 0;
+        EpObjList& rcvfds = thread->GetFdSet();
+        EpollerObj* fdata = NULL;
+        TAILQ_FOREACH(fdata, &rcvfds, _entry)
+        {
+            if (fdata->GetRcvEvents() != 0)
+            {
+                rcvnum++;
+            }        
+        }
+        this->EpollDel(rcvfds);     // 在一个函数中ADD, DEL 闭环控制
+
+        if (rcvnum == 0)    // 超时处理, 返回错误
+        {
+            errno = ETIME;
+            return false;
+        }
+
+        return true;   
+    }
+    ```
+
+2. 创建一个任务队列，将所有实例化好的任务全部加入到任务队列中，然后调用`mt_exec_all_task`函数执行所有任务，任务队列中的任务是并行的执行的，
 等待所有任务执行完成之后当前微线程再继续运行，任务队列中的任务是通过给每个任务创建一个子微线程，来达到并行执行的效果。
 
     ```c++
@@ -211,6 +276,7 @@ tags: micro thread
 
     }
     ```
+
 考虑一个问题，上面提到线程池中的线程上下文是在`InitContext`函数中执行的，所以恢复一个线程运行时也会从`InitContext`函数中开始执行，
 那这里就有一个问题，`InitContext`函数中是怎么调用到`mt_task_process`函数去执行具体的任务了？   
 这里要重点关注恢复线程上下文的函数`RestoreContext`，
@@ -218,108 +284,47 @@ tags: micro thread
 查看汇编函数`restore_context`可以看到，他直接将第二个参数设置为`restore_context`函数的返回值。    
 在回过头去看`InitContext`函数，当恢复微线程上下文之后，从`save_context`函数之后继续执行，首先他会判断返回值，如果不等于0则调用`ScheduleStartRun`执行任务函数，
 所以这里有两种情况，保存上下文的时候`save_context`返回0继续往下执行，恢复上下文的时候返回1，进入`if`语句内执行任务。
-```c
-void Thread::RestoreContext()
-{
-    restore_context(_jmpbuf, 1);    
-}
 
-void Thread::InitContext()
-{
-
-    if (save_context(_jmpbuf) != 0)
+    ```c
+    void Thread::RestoreContext()
     {
-        /* 当初始化好的微线程被调度执行时，会走到这里 */
-        ScheduleObj::Instance()->ScheduleStartRun(); // 直接调用 this->run?
+        restore_context(_jmpbuf, 1);    
     }
-    
-    if (_stack != NULL)
+
+    void Thread::InitContext()
     {
-        replace_esp(_jmpbuf, _stack->_esp);
+
+        if (save_context(_jmpbuf) != 0)
+        {
+            /* 当初始化好的微线程被调度执行时，会走到这里 */
+            ScheduleObj::Instance()->ScheduleStartRun(); // 直接调用 this->run?
+        }
+        
+        if (_stack != NULL)
+        {
+            replace_esp(_jmpbuf, _stack->_esp);
+        }
     }
-}
 
-##
-#  @brief restore_context
-##
-	.text
-	.align 4
-	.globl restore_context
-	.type restore_context, @function
-restore_context:
-	movl %esi,%eax			# 设置第二个参数1为返回值
-	movq (%rdi),%rbx
-	movq 8(%rdi),%rsp
-	movq 16(%rdi),%rbp
-	movq 24(%rdi),%r12
-	movq 32(%rdi),%r13
-	movq 40(%rdi),%r14
-	movq 48(%rdi),%r15
-	jmp *56(%rdi)
+    ##
+    #  @brief restore_context
+    ##
+        .text
+        .align 4
+        .globl restore_context
+        .type restore_context, @function
+    restore_context:
+        movl %esi,%eax			# 设置第二个参数1为返回值
+        movq (%rdi),%rbx
+        movq 8(%rdi),%rsp
+        movq 16(%rdi),%rbp
+        movq 24(%rdi),%r12
+        movq 32(%rdi),%r13
+        movq 40(%rdi),%r14
+        movq 48(%rdi),%r15
+        jmp *56(%rdi)
 
-	.size restore_context,.-restore_context
-```
-2. 实例化一个任务，然后直接调用任务中的`Process()`函数来执行，这种任务的执行方式是串行的，当此任务执行完成之后，才能继续往下执行。
-如果遇到网络IO操作被阻塞时，微线程框架会将当前操作的套接字句柄加入到监听队列，然后调度其他微线程执行，将此微线程加入到等待队列；
-
-    ```c++
-    /* 网络IO操作被阻塞时都会调用此函数来调度切换微线程 */
-    bool MtFrame::EpollSchedule(EpObjList* fdlist, EpollerObj* fd, int timeout)
-    {
-        MicroThread* thread = GetActiveThread();
-        if (NULL == thread)
-        {
-            MTLOG_ERROR("active thread null, epoll schedule failed");
-            return false;
-        }
-
-        // 1. 整合该线程需要关心的epoll调度对象，将套接字加入到监听队列
-        thread->ClearAllFd();
-        if (fdlist) 
-        {
-            thread->AddFdList(fdlist);
-        }
-        if (fd) 
-        {
-            thread->AddFd(fd);
-        }
-
-        // 2. 设置epoll监听事件, 调整超时时间, 切换IO等待状态, 触发切换
-        thread->SetWakeupTime(timeout + this->GetLastClock());
-        if (!this->EpollAdd(thread->GetFdSet()))
-        {
-            MTLOG_ERROR("epoll add failed, errno: %d", errno);
-            return false;
-        }
-
-        /* 将当前线程加入到等待队列，调用 SwitchContext 函数，进行微线程上下文的切换
-         * 首先是调用上文中提到的汇编函数 save_context 来保存当前线程的上下文，
-         * 然后调用 restore_context 汇编函数来恢复下一个要运行的微线程的上下文，
-         * 恢复上下文的操作主要是将_jmpbuf数组中的内容恢复到对应的寄存器中
-         */
-        this->InsertIoWait(thread); 
-        thread->SwitchContext();
-
-        /* 当有事件发生或者超时，微线程再次被调度时从这里继续执行 */
-        // 3. 调度OK, 判定超时, epoll ctrl 还原状态
-        int rcvnum = 0;
-        EpObjList& rcvfds = thread->GetFdSet();
-        EpollerObj* fdata = NULL;
-        TAILQ_FOREACH(fdata, &rcvfds, _entry)
-        {
-            if (fdata->GetRcvEvents() != 0)
-            {
-                rcvnum++;
-            }        
-        }
-        this->EpollDel(rcvfds);     // 在一个函数中ADD, DEL 闭环控制
-
-        if (rcvnum == 0)    // 超时处理, 返回错误
-        {
-            errno = ETIME;
-            return false;
-        }
-
-        return true;   
-    }
+        .size restore_context,.-restore_context
     ```
+
+
