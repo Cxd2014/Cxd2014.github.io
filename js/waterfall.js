@@ -48,7 +48,7 @@
         core_tech: 'C 数据结构',
         description: 'C语言版数据结构'
     },{
-        demo_link: 'http://v.youku.com/v_show/id_XMTYyMDE2NDcwOA==.html',
+        demo_link: 'https://www.bilibili.com/video/av23025246',
         img_link: '/css/1.png',
         //code_link: 'http://v.youku.com/v_show/id_XMTYyMDE2NDcwOA==.html',
         title: '毕业相册',
@@ -75,13 +75,20 @@
       title: '大范围移动延时摄影-深圳',
       core_tech: '延时摄影',
       description: '延时摄影'
-  },{
-    demo_link: 'https://www.bilibili.com/video/av25738447',
-    img_link: '/css/20180708214641.jpg',
-    //code_link: 'http://v.youku.com/v_show/id_XOTE2OTM3NTc2.html',
-    title: '澳门Vlog',
-    core_tech: 'vlog',
-    description: '延时摄影'
+    },{
+      demo_link: 'https://www.bilibili.com/video/av25738447',
+      img_link: '/css/20180708214641.jpg',
+      //code_link: 'http://v.youku.com/v_show/id_XOTE2OTM3NTc2.html',
+      title: '澳门Vlog',
+      core_tech: 'vlog',
+      description: '延时摄影'
+    },{
+      demo_link: 'https://www.bilibili.com/video/av33340092',
+      img_link: '/css/20181008102926.jpg',
+      //code_link: 'http://v.youku.com/v_show/id_XOTE2OTM3NTc2.html',
+      title: '香港vlog',
+      core_tech: 'vlog',
+      description: '摄影'
     }
   ];
 
