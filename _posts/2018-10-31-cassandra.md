@@ -46,10 +46,11 @@ Cassandra有两种备份策略：
 
 ### Cassandra写操作
 
-![Cassandra-Write-Path-Ring]({{"/css/pics/cassandra/Cassandra-Write-Path-Ring.png"}})    
 因为Cassandra是无主结构，所以客户端可以连接到任何一个Node上，被连接的这个Node称为`coordinator`，`coordinator`负责处理此客户端的所有请求。   
 `Consistency level`用于指定多少个Node返回写成功之后，`coordinator`给客户端返回成功。例如：当备份数量设置为3，`Consistency level`设置为1时，写请求会分发到三个Node上，
 只要有一个Node返回写成，则`coordinator`给客户端返回成功。
+
+![Cassandra-Write-Path-Ring]({{"/css/pics/cassandra/Cassandra-Write-Path-Ring.png"}})    
 
 写请求在Node内部的实现步骤：首先会提交Commit Log记录，然后将数据写到Mem-table缓存中。Mem-table中的数据刷新到磁盘SSTable的时机：   
 * Mem-table分配的内存空间被写满
@@ -62,7 +63,8 @@ Cassandra有两种备份策略：
 
 Mem-table中的数据每次刷新都会创建一个新的SSTables，并且对同一份数据的修改也是通过增加一份数据，而不是修改原有数据来实现的。
 所以一份数据可能存在多个SSTables中，并且需要其他工具来辅助读操作（这也是为什么cassandra适用于写多读少的场景）。
-Cassandra会定期合并SSTables并删除旧的数据，这种操作叫做压缩：首先收集同一个row key所有版本的数据，然后对比column数据中的版本号（时间戳），使用最新的版本号合并为一个最新的数据集。   
+Cassandra会定期合并SSTables并删除旧的数据，这种操作叫做压缩：首先收集同一个row key所有版本的数据，然后对比column数据中的版本号（时间戳），使用最新的版本号合并为一个最新的数据集，
+这样可以增加读性能，避免在读操作时扫描所有SSTable表。   
 
 ![dml_compaction]({{"/css/pics/cassandra/dml_compaction.png"}}) 
 
@@ -93,7 +95,7 @@ Cassandra会定期合并SSTables并删除旧的数据，这种操作叫做压缩
 读操作和写操作类似，也是其中一个Node当作`coordinator`，根据备份数量和`Consistency level`来确定多少个备份返回成功，就视为请求成功。
 如果不同备份返回的数据版本号不一致，`coordinator`会返回最新的版本给客户端，然后发送一个读修复命令给保存有旧数据的Node，触发他们同步更新数据。   
 
-读请求在Node内部的实现步骤：
+读请求在Node内部的实现步骤，查找所有SSTable，将该row key的数据全部找出来，然后做合并操作：
 * 在memtable中查找
 * 如果开启了row cache功能，在row cache中查找
 * 在Bloom filter中查找
