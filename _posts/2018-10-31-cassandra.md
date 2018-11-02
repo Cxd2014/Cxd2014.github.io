@@ -100,11 +100,20 @@ Cassandra会定期合并SSTables并删除旧的数据，这种操作叫做压缩
 * 如果开启了row cache功能，在row cache中查找
 * 在Bloom filter中查找
 * 如果开启了partition key cache功能，在partition key cache中查找
-* 如果在partition key cache找到则直接访问compression offset map，如果没有找到则到partition summary中查找
-* 使用compression offset map加载磁盘数据
+* 如果在partition key cache找到则直接访问compression offset map，如果没有找到则到partition summary中查找partition index
+* 通过partition index在compression offset map中查找数据的存放地址，加载磁盘数据
 * 获取SSTable中的指定数据
 
 ![dml_caching-reads_12]({{"/css/pics/cassandra/dml_caching-reads_12.png"}}) 
+
+* Row cache   
+    数据缓冲区，他会将SSTables中的一部分数据存储到内存中，以满足快速读取操作
+* Partition Key Cache   
+    Partition key的缓冲区，他会缓存Partition key对应的partition index
+* Partition Summary
+    分段存放key的索引，例如分段为20，则他会存放第1个key的位置以及第20个key的位置。找到分段之后去遍历分段找到对应的partition index
+* Compression offset map   
+    存放数据在磁盘中的存放地址，通过partition index找到对应数据的地址。
 
 ### Node之间的通信协议Gossip
 
