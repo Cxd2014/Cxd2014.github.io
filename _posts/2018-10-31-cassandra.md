@@ -99,7 +99,7 @@ Cassandra会定期合并SSTables并删除旧的数据，这种操作叫做压缩
 * 在memtable中查找
 * 如果开启了row cache功能，在row cache中查找
 * 在Bloom filter中查找
-* 如果开启了partition key cache功能，在partition key cache中查找
+* 如果开启了partition key cache功能，在partition key cache中查找partition index
 * 如果在partition key cache找到则直接访问compression offset map，如果没有找到则到partition summary中查找partition index
 * 通过partition index在compression offset map中查找数据的存放地址，加载磁盘数据
 * 获取SSTable中的指定数据
