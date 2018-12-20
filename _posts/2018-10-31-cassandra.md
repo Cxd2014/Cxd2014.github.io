@@ -131,3 +131,6 @@ Gossip是用来在Cassandra集群中的各个结点之间传输结点状态的�
 [How is data written?](https://docs.datastax.com/en/cassandra/3.0/cassandra/dml/dmlHowDataWritten.html)   
 [Cassandra - Data Model](https://www.tutorialspoint.com/cassandra/cassandra_data_model.htm)   
 [Cassandra简介](https://www.cnblogs.com/loveis715/p/5299495.html)   
+[Examples of read consistency levels](https://docs.datastax.com/en/cassandra/3.0/cassandra/dml/dmlClientRequestsReadExp.html)   
+[Multiple datacenter write requests](https://docs.datastax.com/en/cassandra/3.0/cassandra/dml/dmlClientRequestsMultiDCWrites.html)   
+
