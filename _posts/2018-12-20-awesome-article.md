@@ -19,7 +19,11 @@ tags: awesome article
 * [Some study on database storage internals](https://medium.com/@kousiknath/data-structures-database-storage-internals-1f5ed3619d43)   
 这篇文章讲解了数据库中为了提高读写性能做了哪些优化，并且说明了这些优化是为了解决哪些问题：   
     1. 使用B+Tree作为索引，主要目的是为了减少查询数据时读取磁盘的次数。
-    2. 数据库中的索引并不是越多越好，太多在数据插入，更新，删除时会修改大量索引结构影响性能。
-    3. `LSM Tree`就是Cassandra数据库中应用的数据存储方式，他主要是利用了磁盘顺序写的性能要远大于随机写这一特性。
+    2. 数据库中的索引并不是越多越好，太多在数据插入，更新，删除时需要修改大量索引结构降低性能。
+    3. BTree索引结构的写比读更麻烦，因为你需要先从磁盘中读取数据，修改之后再写入磁盘，这叫做写放大，所以某些数据库会使用缓存来缓解这个问题。
+    4. `LSM Tree`就是Cassandra数据库中应用的数据存储方式，他主要是利用了磁盘顺序写的性能要远大于随机写这一特性。
+
+* [NoSQL Databases: a Survey and Decision Guidance](https://medium.baqend.com/nosql-databases-a-survey-and-decision-guidance-ea7823a822d)   
+
 
 
