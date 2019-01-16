@@ -23,7 +23,11 @@ tags: awesome article
     3. BTree索引结构的写比读更麻烦，因为你需要先从磁盘中读取数据，修改之后再写入磁盘，这叫做写放大，所以某些数据库会使用缓存来缓解这个问题。
     4. `LSM Tree`就是Cassandra数据库中应用的数据存储方式，他主要是利用了磁盘顺序写的性能要远大于随机写这一特性。
 
-* [NoSQL Databases: a Survey and Decision Guidance](https://medium.baqend.com/nosql-databases-a-survey-and-decision-guidance-ea7823a822d)   
 
+### 消息对列
 
+* [Thorough Introduction to Apache Kafka](https://hackernoon.com/thorough-introduction-to-apache-kafka-6fbf2989bbc1)   
+这篇文章从整体架构上介绍了Kafka，Kafka是一个分布式，可扩展，高可用的消息队列。   
+    1. Kafka会将数据落地存储，数据存储类似于`commit log`的方式不断追加写，每份数据都会分配一个ID，并根据ID建立一个索引文件，保证读写数据的复杂度都为O(1)。
+    2. 数据被分为Topic，每个Topic又可以分为多个partition（便于分布部署），每个partition都有冗余备份。
 
