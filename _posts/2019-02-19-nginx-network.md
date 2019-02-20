@@ -135,7 +135,7 @@ ngx_epoll_process_events(ngx_cycle_t *cycle, ngx_msec_t timer, ngx_uint_t flags)
 }
 ```
 
-对于监听套接字来说，有可读时间就会进入`ngx_event_accept`函数来接收请求。`ngx_event_accept`函数首先调用`accept`函数接收TCP套接字请求，
+对于监听套接字来说，有可读事件就会进入`ngx_event_accept`函数来接收请求。`ngx_event_accept`函数首先调用`accept`函数接收TCP套接字请求，
 对接收到的新套接字创建一个`ngx_connection_t`连接并初始化，然后调用注册进监听套接字`ngx_listening_t`结构体中的`handler`函数进行下一步处理。
 对于HTTP请求来说这个`handler`函数由HTTP模块注册，下面会讲到。
 
@@ -232,11 +232,11 @@ Nginx网络请求的处理流程大概是：
 1. Nginx的master进程根据work进程的数量N，创建N个监听套接字。
 2. event事件模块将监听套接字加入到epoll事件中，并设置事件处理函数为`ngx_event_accept`函数。
 3. 当有请求到来时，epoll事件处理函数直接调用`ngx_event_accept`函数来接收请求并调用HTTP模块注册的处理函数`ngx_http_init_connection`。
-3. http模块将接收到的新套接字加入到epoll事件中，并设置事件处理函数为`ngx_http_wait_request_handler`函数。
+3. `ngx_http_init_connection`函数将接收到的新套接字加入到epoll事件中，并设置事件处理函数为`ngx_http_wait_request_handler`函数。
 4. 此时TCP连接建立完成，当发送HTTP请求时，epoll事件处理函数直接调用`ngx_http_wait_request_handler`函数来处理请求。
 
-这里还有一个疑问，work进程是怎么进入epoll事件处理函数的？   
-work进程在`ngx_worker_process_cycle`函数中无限循环调用`ngx_process_events_and_timers`函数，此函数会调用`ngx_process_events`函数，此函数就是epoll注册的事件处理函数`ngx_epoll_process_events`。
+这里还有一个疑问，work进程是怎么进入到epoll事件处理函数的？   
+work进程在`ngx_worker_process_cycle`函数中无限循环调用`ngx_process_events_and_timers`函数，此函数会调用`ngx_process_events`函数，此函数就是epoll模块注册的事件处理函数`ngx_epoll_process_events`。
 
 
 基于nginx-1.14.0源码分析
