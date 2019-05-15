@@ -89,6 +89,13 @@
       title: '香港vlog',
       core_tech: 'vlog',
       description: '摄影'
+    },{
+      demo_link: 'https://www.bilibili.com/video/av52233417',
+      img_link: '/css/20190512130816.jpg',
+      //code_link: 'http://v.youku.com/v_show/id_XOTE2OTM3NTc2.html',
+      title: '柬埔寨旅拍短片',
+      core_tech: 'vlog',
+      description: '旅拍'
     }
   ];
 
