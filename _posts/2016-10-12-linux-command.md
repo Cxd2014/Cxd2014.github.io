@@ -103,6 +103,7 @@ Shift键 + : | 进入尾行模式（在命令行模式下）
 `tcpdump -i eth3 udp port 1111` | 抓取UDP协议并指定端口号
 `tcpdump -i eth3 udp -c 10` | 抓取10个UDP协议的数据包
 `tcpdump -i eth3 udp -w ./data.cap` | 抓取UDP协议数据并输出为Wireshark格式的文件  
+`tcpdump -nn -i eth1 -Xps0 udp and host 10.100.73.38` 显示包的所有数据
 
 注：按`ctrl + c`结束抓取数据包，并保存数据
 
@@ -115,3 +116,15 @@ ifconfig eth3 down | 关闭eth3网卡
 ifconfig eth3 192.168.1.123 | 修改IP地址
 ifconfig eth3 192.168.1.123 netmask 255.255.255.0 | 修改IP地址和子网掩码
 ifconfig eth3 hw ether 00:AA:BB:CC:dd:EE | 修改MAC地址
+
+### 常用
+
+命令|解释
+---|---
+du -ah --max-depth=1 | sort -rn   | 查看目录占有空间并排序
+df -h | 查看磁盘使用情况
+ps -p 3201 -o lstart,etime | 查看指定进程启动时间和运行时间
+lsof -p 27432 | 查看进程打开的描述符
+
+
+
