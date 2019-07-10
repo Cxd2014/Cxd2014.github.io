@@ -50,12 +50,12 @@ Interface的实现：
 
 ### 参考
 
-最近一直在看Go语言相关的书籍和博客，写一篇文章记录一下，另外看了慕课网的一个Go语言教程，跟着写了一个[外部排序程序](https://github.com/Cxd2014/ProgramTool/blob/master/go_sort.go)。主要用于学习Go语言的协程和chanle。
+最近一直在看Go语言相关的书籍和博客，写一篇文章记录一下，另外看了慕课网的一个Go语言教程，跟着写了一个[外部排序程序](https://github.com/Cxd2014/ProgramTool/blob/master/go_sort.go)。主要用于学习Go语言的协程和channel。
 
 [Go语言圣经](https://docs.hacknode.org/gopl-zh/index.html)  
 [Go语言高级编程](https://chai2010.gitbooks.io/advanced-go-programming-book/content/)  
 [Everything you need to know about Packages in Go](https://medium.com/rungo/everything-you-need-to-know-about-packages-in-go-b8bac62b74cc)
 [Go Web 编程](https://github.com/astaxie/build-web-application-with-golang/tree/master/zh)  
-[GO源码分析](http://legendtkl.com/categories/golang/)
+[GO源码分析](http://legendtkl.com/categories/golang/)  
 [深入解析Go](https://tiancaiamao.gitbooks.io/go-internals/content/zh/01.0.html)
 
