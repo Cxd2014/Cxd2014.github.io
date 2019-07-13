@@ -350,7 +350,7 @@ public:
 输入：["H","a","n","n","a","h"]  
 输出：["h","a","n","n","a","H"]  
 
-```C++
+```c++
 class Solution {
 public:
     void reverseString(vector<char>& s) {
@@ -390,7 +390,7 @@ public:
 尽可能想出更多的解决方案，至少有三种不同的方法可以解决这个问题。
 要求使用空间复杂度为 O(1) 的 原地 算法。
 
-```C++
+```c++
 /*  思路：将K前面的所有元素反转，在将K后面的元素反转，然后反转这个数组
 */
 class Solution {
@@ -440,7 +440,7 @@ public:
 输入: [1,1,1,3,3,4,3,2,4,2]  
 输出: true
 
-```C++
+```c++
 class Solution {
 public:
     bool containsDuplicate(vector<int>& nums) {
@@ -871,7 +871,7 @@ insert(val)：当元素 val 不存在时，向集合中插入该项。
 remove(val)：元素 val 存在时，从集合中移除该项。  
 getRandom：随机返回现有集合中的一项。每个元素应该有相同的概率被返回。  
 
-```C++
+```c++
 /*  思路：一个map，一个数组，map中存放对应数字在数组中的位置
 */
 class RandomizedSet {
