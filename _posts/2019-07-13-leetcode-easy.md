@@ -1086,3 +1086,99 @@ public:
     }
 };
 ```
+
+### 前 K 个高频元素
+
+给定一个非空的整数数组，返回其中出现频率前 k 高的元素。
+
+示例 1:  
+输入: nums = [1,1,1,2,2,3], k = 2  
+输出: [1,2]
+
+示例 2:  
+输入: nums = [1], k = 1  
+输出: [1]
+
+说明：  
+你可以假设给定的 k 总是合理的，且 1 ≤ k ≤ 数组中不相同的元素的个数。  
+你的算法的时间复杂度必须优于 O(n log n) , n 是数组的大小。
+
+```c++
+/*  思路：先用map统计所有数出现的次数，然后设置一个大小为K的小顶堆，遍历map以出现次数为key放入堆中
+    最后堆中的数据就是结果
+*/
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        
+        map<int, int> mapCount;
+        priority_queue<int, vector<pair<int,int> >, greater<pair<int,int> > > minHeap;
+        vector<int> result;
+        
+        for (auto iter : nums)
+        {
+            mapCount[iter]++;
+        }
+        
+        for (auto iter : mapCount)
+        {
+            if (minHeap.size() < k)
+            {
+                minHeap.push(pair(iter.second, iter.first));
+            }
+            else if (minHeap.top().first < iter.second)
+            {
+                minHeap.pop();
+                minHeap.push(pair(iter.second, iter.first));
+            }
+        }
+        
+        for (int i = 0; i < k; i++)
+        {
+            result.push_back(minHeap.top().second);
+            minHeap.pop();
+        }
+        return result;
+    }
+};
+```
+
+### 二叉搜索树中第K小的元素
+
+给定一个二叉搜索树，编写一个函数 kthSmallest 来查找其中第 k 个最小的元素。
+
+说明：  
+你可以假设 k 总是有效的，1 ≤ k ≤ 二叉搜索树元素个数。
+
+```c++
+/*  思路：二叉树中序遍历可以得到一个有序数组，然后返回第K个元素
+*/
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void InOrderTraverse(TreeNode* root, vector<int> &vec)
+    {
+        if(root != NULL)
+        {
+            InOrderTraverse(root->left, vec);
+            vec.push_back(root->val);
+            InOrderTraverse(root->right, vec);
+        }
+    }
+    
+    int kthSmallest(TreeNode* root, int k) {
+        vector<int> vec;
+        InOrderTraverse(root, vec);
+        return vec[k-1];
+    }
+    
+};
+```
