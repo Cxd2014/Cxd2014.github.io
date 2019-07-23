@@ -1182,3 +1182,339 @@ public:
     
 };
 ```
+
+### 实现 Trie (前缀树)
+
+实现一个 Trie (前缀树)，包含 insert, search, 和 startsWith 这三个操作。
+
+```c++
+class TrieNode{
+public:
+    TrieNode* next[26];
+    bool isword;
+    TrieNode(){
+        memset(next,NULL,sizeof(next));
+        isword=false;
+    }
+    ~TrieNode(){
+        for(int i=0;i<26;i++)if(next[i])delete next[i];
+    }
+};
+
+class Trie {
+public:
+    /** Initialize your data structure here. */
+    TrieNode* root;
+    Trie() {
+        root=new TrieNode();
+    }
+    
+    /** Inserts a word into the trie. */
+    void insert(string word) {
+        TrieNode *node = root;
+        for (int i = 0; i < word.length(); i++)
+        {
+            int pos = word[i] - 'a';
+            if (node->next[pos])
+            {
+                node = node->next[pos];
+            }
+            else
+            {
+                node->next[pos] = new TrieNode();
+                node = node->next[pos];
+            }
+        }
+        node->isword = true;
+    }
+    
+    /** Returns if the word is in the trie. */
+    bool search(string word) {
+        TrieNode *node = root;
+        for (int i = 0; i < word.length(); i++)
+        {
+            int pos = word[i] - 'a';
+            if (node->next[pos])
+            {
+                node = node->next[pos];
+            }
+            else 
+            {
+                return false;
+            }
+        }
+        return node->isword;
+    }
+    
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    bool startsWith(string prefix) {
+        TrieNode *node = root;
+        for (int i = 0; i < prefix.length(); i++)
+        {
+            int pos = prefix[i] - 'a';
+            if (node->next[pos])
+            {
+                node = node->next[pos];
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+```
+
+### 打乱数组
+
+打乱一个没有重复元素的数组。
+
+示例:
+```
+// 以数字集合 1, 2 和 3 初始化数组。
+int[] nums = {1,2,3};
+Solution solution = new Solution(nums);
+
+// 打乱数组 [1,2,3] 并返回结果。任何 [1,2,3]的排列返回的概率应该相同。
+solution.shuffle();
+
+// 重设数组到它的初始状态[1,2,3]。
+solution.reset();
+
+// 随机返回数组[1,2,3]打乱后的结果。
+solution.shuffle();
+```
+
+```c++
+class Solution {
+public:
+    vector<int> vecNums;
+    Solution(vector<int>& nums) {
+        vecNums = nums;
+    }
+    
+    /** Resets the array to its original configuration and return it. */
+    vector<int> reset() {
+        return vecNums;
+    }
+    
+    /** Returns a random shuffling of the array. */
+    vector<int> shuffle() {
+        vector<int> res = vecNums;
+        for(int i = 0; i < res.size(); i++)
+        {
+            int t = i + rand() % (res.size() - i);
+            swap(res[i], res[t]);
+        }
+        return res;
+    }
+};
+```
+
+### 递增的三元子序列
+
+给定一个未排序的数组，判断这个数组中是否存在长度为 3 的递增子序列。
+
+数学表达式如下:  
+如果存在这样的 i, j, k,  且满足 0 ≤ i < j < k ≤ n-1，  
+使得 arr[i] < arr[j] < arr[k] ，返回 true ; 否则返回 false 。  
+说明: 要求算法的时间复杂度为 O(n)，空间复杂度为 O(1) 。  
+```c++
+/*  思路：找到当前过的遍历数据中的最小数和第二小的数，然后接下来的数据有大于第二小的数则说明数组中有递增的三元子序列
+*/
+class Solution {
+public:
+    bool increasingTriplet(vector<int>& nums) {
+        
+        int min = INT_MAX, secondMin = INT_MAX;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (nums[i] <= min)
+                min = nums[i];
+            else if (nums[i] < secondMin)
+                secondMin = nums[i];
+            else if (nums[i] > secondMin)
+                return true;
+        }
+        return false;
+    }
+};
+```
+
+### 除自身以外数组的乘积
+
+给定长度为 n 的整数数组 nums，其中 n > 1，返回输出数组 output ，其中 output[i] 等于 nums 中除 nums[i] 之外其余各元素的乘积。
+
+示例:  
+输入: [1,2,3,4]  
+输出: [24,12,8,6]  
+说明: 请不要使用除法，且在 O(n) 时间复杂度内完成此题。  
+
+```c++
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        int size = nums.size();
+        vector<int> res(size, 1);
+
+        int mul = 1;
+        for (int i = 1; i < size; i++)
+        {
+            mul = mul * nums[i - 1];
+            res[i] = mul;
+        }
+
+        mul = 1;
+        for (int i = size - 2; i >= 0; i--)
+        {
+            mul = mul * nums[i + 1];
+            res[i] = res[i] * mul;
+        }
+
+        for (auto i : res)
+        {
+            cout << i << endl;
+        }
+        return res;
+    }
+};
+```
+
+### 有序矩阵中第K小的元素
+
+给定一个 n x n 矩阵，其中每行和每列元素均按升序排序，找到矩阵中第k小的元素。
+请注意，它是排序后的第k小元素，而不是第k个元素。
+
+```c++
+/* 用一个大顶堆存放二维数组中K个最小的元素 */
+class Solution {
+public:
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+        
+        std::priority_queue<int, std::vector<int>, std::less<int> > maxHeap;
+        
+        for (int i = 0; i < matrix.size(); i++)
+            for (int j = 0; j < matrix[i].size(); j++)
+            {
+                if (maxHeap.size() < k)
+                {
+                    maxHeap.push(matrix[i][j]);
+                }
+                else if (maxHeap.top() > matrix[i][j])
+                {
+                    maxHeap.pop();
+                    maxHeap.push(matrix[i][j]);
+                }
+            }
+        return maxHeap.top();
+    }
+};
+```
+
+### 逆波兰表达式求值
+
+根据逆波兰表示法，求表达式的值。  
+有效的运算符包括 +, -, *, / 。每个运算对象可以是整数，也可以是另一个逆波兰表达式。
+
+说明：  
+整数除法只保留整数部分。  
+给定逆波兰表达式总是有效的。换句话说，表达式总会得出有效数值且不存在除数为 0 的情况。  
+
+```c++
+class Solution {
+    
+    void getNum(int &num1, int &num2, stack<int> &stNums)
+    {
+        num1 = stNums.top();
+        stNums.pop();
+        num2 = stNums.top();
+        stNums.pop();
+    }
+    
+public:
+    int evalRPN(vector<string>& tokens) {
+        stack<int> stNums;
+        
+        int num1,num2;
+        for (auto it : tokens)
+        {
+            if (it == "+")
+            {
+                getNum(num1, num2, stNums);
+                stNums.push(num1 + num2);
+            }
+            else if (it == "-")
+            {
+                getNum(num1, num2, stNums);
+                stNums.push(num2 - num1);
+            }
+            else if (it == "*")
+            {
+                getNum(num1, num2, stNums);
+                stNums.push(num1 * num2);
+            }
+            else if (it == "/")
+            {
+                getNum(num1, num2, stNums);
+                stNums.push(num2 / num1);
+            }
+            else
+            {
+                stNums.push(stoi(it));
+            }
+        }
+        
+        return stNums.top();
+    }
+};
+```
+
+### 复制带随机指针的链表
+
+给定一个链表，每个节点包含一个额外增加的随机指针，该指针可以指向链表中的任何节点或空节点。  
+要求返回这个链表的深拷贝。 
+
+```c++
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        
+        if (head == NULL)
+            return NULL;
+        
+        Node *node = head;
+        Node *CopyHead = new Node(node->val, NULL, NULL);
+        Node *CopyNode = CopyHead;
+        
+        map<Node*, Node*> mapRandom;
+        mapRandom[node] = CopyNode;
+        
+        node = node->next;
+        while(node)
+        {
+        
+            CopyNode->next = new Node(node->val, NULL, NULL);
+            CopyNode = CopyNode->next;
+            mapRandom[node] = CopyNode;
+            node = node->next;
+        }
+        
+        CopyNode = CopyHead;
+        node = head;
+        while(node)
+        {
+            if (node->random != NULL)
+            {
+                auto iter = mapRandom.find(node->random);
+                CopyNode->random = iter->second;
+            }
+            
+            CopyNode = CopyNode->next;
+            node = node->next;
+        }
+        
+        return CopyHead;
+    }
+};
+```

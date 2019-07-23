@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Leetcode刷题二"
-date:   2019-07-13 10:20:10
+date:   2019-07-16 10:20:10
 categories: programming
 tags: Leetcode
 ---
@@ -245,6 +245,83 @@ public:
             }
         }
         return dp[n];
+    }
+};
+```
+
+### 乘积最大子序列
+
+给定一个整数数组 nums ，找出一个序列中乘积最大的连续子序列（该序列至少包含一个数）。
+
+示例 1:  
+输入: [2,3,-2,4]  
+输出: 6  
+解释: 子数组 [2,3] 有最大乘积 6。  
+
+```c++
+/*  思路：动态规划，当前最大乘积等于前一个最大乘积乘以当前数，因为要有负数，所以要考虑最小值
+*/
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        int size = nums.size();
+        int maxNum = nums[0];
+        
+        int max[size] = {0};
+        int min[size] = {0};
+        
+        max[0] = nums[0];
+        min[0] = nums[0];
+        
+        for (int i = 1; i < size; i++)
+        {
+            min[i] = fmin(fmin(min[i - 1] * nums[i], max[i - 1] * nums[i]), nums[i]);
+            max[i] = fmax(fmax(max[i - 1] * nums[i], min[i - 1] * nums[i]), nums[i]);
+            maxNum = fmax(maxNum, max[i]);
+        }
+        
+        return maxNum;
+    }
+};
+```
+
+### 基本计算器 II
+
+实现一个基本的计算器来计算一个简单的字符串表达式的值。  
+字符串表达式仅包含非负整数，+， - ，*，/ 四种运算符和空格  。 整数除法仅保留整数部分。  
+
+```c++
+/*  思路：开一个栈专门存放数字，如果该数字之前的符号是加或减，那么把当前数字压入栈中，注意如果是减号，则加入当前数字的负数
+    如果之前的符号是乘或除，那么从栈顶取出一个数字和当前数字进行乘或除的运算，再把结果压入栈中，最后遍历一遍栈的数据相加
+*/
+class Solution {
+public:
+    int calculate(string s) {
+        
+        long res = 0, d = 0;
+        char sign = '+';
+        stack<int> nums;
+        for (int i = 0; i < s.size(); ++i) {
+            if (s[i] >= '0') {
+                d = d * 10 + s[i] - '0';
+            }
+            if ((s[i] < '0' && s[i] != ' ') || i == s.size() - 1) {
+                if (sign == '+') nums.push(d);
+                if (sign == '-') nums.push(-d);
+                if (sign == '*' || sign == '/') {
+                    int tmp = sign == '*' ? nums.top() * d : nums.top() / d;
+                    nums.pop();
+                    nums.push(tmp);
+                }
+                sign = s[i];
+                d = 0;
+            }
+        }
+        while (!nums.empty()) {
+            res += nums.top();
+            nums.pop();
+        }
+        return res;
     }
 };
 ```
