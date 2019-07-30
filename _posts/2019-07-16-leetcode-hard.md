@@ -325,3 +325,184 @@ public:
     }
 };
 ```
+
+### 计算右侧小于当前元素的个数
+
+给定一个整数数组 nums，按要求返回一个新数组 counts。数组 counts 有该性质： counts[i] 的值是  nums[i] 右侧小于 nums[i] 的元素的数量。
+
+```c++
+/*  思路：将数组倒序插入到二叉树中，记录每个节点左边的子节点数量。
+*/
+class Solution {
+    struct Node {
+        shared_ptr<Node> left;
+        shared_ptr<Node> right;
+        int val;
+        int count = 0; // 左子树节点的个数
+        Node(int val) : val(val) {}
+    };
+public:
+    vector<int> countSmaller(vector<int>& nums) {
+        shared_ptr<Node> root;
+        vector<int> res(nums.size());
+        for (int i = nums.size() - 1; i >= 0; --i) {
+            root = insert(root, nums[i], &res, i);
+        }
+        return res;
+    }
+    
+    shared_ptr<Node> insert(shared_ptr<Node> root, int val, vector<int>* res, int index) {
+        if (!root) {
+             return make_shared<Node>(val);
+        }
+        auto& r = *res;
+        if (val <= root->val) {
+            root->count++;
+            root->left = insert(root->left, val, res, index);
+        } else {
+            r[index] += root->count + 1;
+            root->right = insert(root->right, val, res, index);
+        }
+        return root;
+    }
+};
+```
+
+### 打家劫舍
+
+你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。  
+给定一个代表每个房屋存放金额的非负整数数组，计算你在不触动警报装置的情况下，能够偷窃到的最高金额。
+
+```c++
+/*
+    动态规划方程：dp[i] = max(dp[i-2]+nums[i], dp[i-1])
+*/
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        if(nums.size() <= 1){
+            return nums.size() == 0 ? 0 : nums[0];
+        }
+
+        vector<int> dp(nums.size(), 0);
+        dp[0] = nums[0];
+        dp[1] = max(nums[0], nums[1]);
+        for(int i = 2; i < nums.size(); i++){
+            dp[i] = max(dp[i-2] + nums[i], dp[i-1]);
+        }
+        return dp[nums.size() - 1];
+    }
+};
+```
+
+### LRU缓存机制
+
+运用你所掌握的数据结构，设计和实现一个  LRU (最近最少使用) 缓存机制。它应该支持以下操作： 获取数据 get 和 写入数据 put 。  
+获取数据 get(key) - 如果密钥 (key) 存在于缓存中，则获取密钥的值（总是正数），否则返回 -1。  
+写入数据 put(key, value) - 如果密钥不存在，则写入其数据值。当缓存容量达到上限时，它应该在写入新数据之前删除最近最少使用的数据值，从而为新的数据值留出空间。  
+
+```c++
+/*
+    用一个双向链表存放KV，一个Map存放K对应V的位置，每次get将得到的KV重新放到链表的头部，
+    每次put，如果超过最大缓存限制，则删除链表的最后一个KV，然后将入到头部。
+*/
+class LRUCache {
+public:
+    int cap;
+    list<pair<int, int>> DoubleList;
+    unordered_map<int, list<pair<int, int>>::iterator> hashMap;
+        
+    LRUCache(int capacity) {
+        cap = capacity;
+    }
+    
+    int get(int key) {
+        auto iter = hashMap.find(key);
+        if (iter != hashMap.end())
+        {
+            pair<int, int> kv = *hashMap[key];
+            DoubleList.erase(hashMap[key]);
+            DoubleList.push_front(kv);
+            hashMap[key] = DoubleList.begin();
+                
+            return kv.second;
+        }
+        return -1;
+    }
+    
+    void put(int key, int value) {
+        
+        auto iter = hashMap.find(key);
+        if (iter == hashMap.end())
+        {
+            if (hashMap.size() >= cap)
+            {
+                auto lastPair = DoubleList.back();
+                int lastKey = lastPair.first;
+                hashMap.erase(lastKey);
+                DoubleList.pop_back();
+            }
+            
+            DoubleList.push_front(make_pair(key,value));
+            hashMap[key] = DoubleList.begin();
+        }
+        else
+        {
+            DoubleList.erase(hashMap[key]);
+            DoubleList.push_front(make_pair(key, value));
+            hashMap[key] = DoubleList.begin();
+        }
+    }
+};
+```
+
+### 岛屿数量
+
+给定一个由 '1'（陆地）和 '0'（水）组成的的二维网格，计算岛屿的数量。一个岛被水包围，并且它是通过水平方向或垂直方向上相邻的陆地连接而成的。你可以假设网格的四个边均被水包围。
+
+```c++
+/*
+    深度优先搜索，把所有相邻的1置为0。
+*/
+class Solution
+{
+    void dfs(vector<vector<char>> &grid, int r, int c)
+    {
+        int nr = grid.size();
+        int nc = grid[0].size();
+        
+        grid[r][c] = '0';
+        if (r - 1 >= 0 && grid[r - 1][c] == '1')
+            dfs(grid, r - 1, c);
+        if (r + 1 < nr && grid[r + 1][c] == '1')
+            dfs(grid, r + 1, c);
+        if (c - 1 >= 0 && grid[r][c - 1] == '1')
+            dfs(grid, r, c - 1);
+        if (c + 1 < nc && grid[r][c + 1] == '1')
+            dfs(grid, r, c + 1);
+    }
+
+public:
+    int numIslands(vector<vector<char>> &grid)
+    {
+        int nr = grid.size();
+        if (!nr)
+            return 0;
+        int nc = grid[0].size();
+
+        int num_islands = 0;
+        for (int r = 0; r < nr; ++r)
+        {
+            for (int c = 0; c < nc; ++c)
+            {
+                if (grid[r][c] == '1')
+                {
+                    ++num_islands;
+                    dfs(grid, r, c);
+                }
+            }
+        }
+        return num_islands;
+    }
+};
+```

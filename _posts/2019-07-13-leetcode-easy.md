@@ -1518,3 +1518,197 @@ public:
     }
 };
 ```
+
+### 四数相加 II
+
+给定四个包含整数的数组列表 A , B , C , D ,计算有多少个元组 (i, j, k, l) ，使得 A[i] + B[j] + C[k] + D[l] = 0。  
+为了使问题简单化，所有的 A, B, C, D 具有相同的长度 N，且 0 ≤ N ≤ 500 。所有整数的范围在 -228 到 228 - 1 之间，最终结果不会超过 231 - 1 。
+
+```c++
+/* 先让前两个数组相加，将结果存放到map中，然后让后两个数组相加，得到的数取反在map中找，如果找到说明相加为0 */
+class Solution {
+public:
+    int fourSumCount(vector<int>& A, vector<int>& B, vector<int>& C, vector<int>& D) {
+        int res = 0;
+        map<int, int> sum;
+        for (int i = 0; i < A.size(); i++)
+            for (int j = 0; j < B.size(); j++)
+            {
+                sum[A[i]+B[j]]++;
+            }
+        
+        for (int i = 0; i < C.size(); i++)
+            for (int j = 0; j < D.size(); j++)
+            {
+                int k = C[i]+D[j];
+                auto iter = sum.find(-k);
+                if (iter != sum.end())
+                {
+                    res = res + iter->second;
+                }
+            }
+        
+        return res;
+    }
+};
+```
+
+### 寻找重复数
+
+给定一个包含 n + 1 个整数的数组 nums，其数字都在 1 到 n 之间（包括 1 和 n），可知至少存在一个重复的整数。假设只有一个重复的整数，找出这个重复的数。
+
+```c++
+/*  思路：二分查找，判断数组中比中数小的有多少，如果小于等于说明重复数大于中数，
+    如果大于说明重复数小于中数
+*/
+class Solution {
+public:
+    int findDuplicate(vector<int>& nums) {
+        int left = 1;
+        int right = nums.size();
+            
+        while(left < right)
+        {
+            int mid = (left + right)/2;
+            int count = 0;
+            for (auto i : nums)
+            {
+                if (i <= mid)
+                    count++;
+            }
+            
+            if (count <= mid)
+                left = mid + 1;
+            else
+                right = mid;
+        }
+        return right;
+    }
+};
+```
+
+### 最长连续序列
+
+给定一个未排序的整数数组，找出最长连续序列的长度。要求算法的时间复杂度为 O(n)。  
+
+输入: [100, 4, 200, 1, 3, 2]  
+输出: 4  
+解释: 最长连续序列是 [1, 2, 3, 4]。它的长度为 4。  
+
+```c++
+/*  首先先把所有num值放入HashSet，然后遍历整个数组，如果HashSet中存在该值，就先向下找到边界，
+    找的同时把找到的值一个一个从set中删去，然后再向上找边界，同样要把找到的值都从set中删掉。
+*/
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        set<int> setNum;
+        for(auto i : nums)
+        {
+            setNum.insert(i);
+        }
+        int res = 0;
+        for(auto i : nums)
+        {
+            int count = 1;
+            int high = i;
+            int low = i;
+            while(1)
+            {
+                high++;
+                auto iter = setNum.find(high);
+                if (iter != setNum.end())
+                {
+                    count ++;
+                    setNum.erase(high);
+                }
+                else
+                    break;
+            }
+            while(1)
+            {
+                low--;
+                auto iter = setNum.find(low);
+                if (iter != setNum.end())
+                {
+                    count ++;
+                    setNum.erase(low);
+                }
+                else
+                    break;
+            }
+            res = max(res,count);
+        }
+        return res;
+    }
+};
+```
+
+### 无重复字符的最长子串
+
+给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。
+
+```c++
+/*
+    滑动窗口，用map存放对应字符的位置，遍历字符串如果在map中找到说明重复，
+    则从map中删除最左到该字符的所有字符。
+*/
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        unordered_map<char, int> mapChar;
+        int maxLength = 0;
+
+        int i = 0, j = 0;
+        while (j < s.size())
+        {
+            auto iter = mapChar.find(s[j]);
+            if (iter != mapChar.end())
+            {
+                int k = i;
+                i = iter->second + 1;
+                for (; k < i; k++)
+                {
+                    mapChar.erase(s[k]);
+                }
+            }
+            mapChar[s[j]] = j;
+            j++;
+            maxLength = max(maxLength, j - i);
+        }
+        return maxLength;
+    }
+};
+```
+
+### 最长公共前缀
+
+编写一个函数来查找字符串数组中的最长公共前缀。  
+如果不存在公共前缀，返回空字符串 ""。
+
+```c++
+/*
+    以第一个字符为参考
+*/
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+        string res;
+        if (strs.size() == 0)
+            return res;
+        
+        string firstStr = strs[0];
+        for(int j = 0; j < firstStr.length(); j++)
+        {
+            char c = firstStr[j];
+            for (int i = 1; i < strs.size(); i++)
+            {
+                if (strs[i][j] != c)
+                    return res;
+            }
+            res = res + c;
+        }
+        return res;
+    }
+};
+```
