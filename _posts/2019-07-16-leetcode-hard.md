@@ -506,3 +506,54 @@ public:
     }
 };
 ```
+
+### 岛屿的最大面积
+
+给定一个包含了一些 0 和 1的非空二维数组 grid , 一个 岛屿 是由四个方向 (水平或垂直) 的 1 (代表土地) 构成的组合。你可以假设二维矩阵的四个边缘都被水包围着。  
+找到给定的二维数组中最大的岛屿面积。(如果没有岛屿，则返回面积为0。)
+
+```c++
+/* 在上题的计算岛屿数量中加一个面积计数，找出最大值 */
+class Solution {
+    void dfs(vector<vector<int>> &grid, int r, int c, int &count)
+    {
+        count ++;
+        int nr = grid.size();
+        int nc = grid[0].size();
+        
+        grid[r][c] = 0;
+        if (r - 1 >= 0 && grid[r - 1][c] == 1)
+            dfs(grid, r - 1, c, count);
+        if (r + 1 < nr && grid[r + 1][c] == 1)
+            dfs(grid, r + 1, c, count);
+        if (c - 1 >= 0 && grid[r][c - 1] == 1)
+            dfs(grid, r, c - 1, count);
+        if (c + 1 < nc && grid[r][c + 1] == 1)
+            dfs(grid, r, c + 1, count);
+    }
+    
+public:
+    int maxAreaOfIsland(vector<vector<int>>& grid) {
+        int nr = grid.size();
+        if (!nr)
+            return 0;
+        int nc = grid[0].size();
+
+        int count = 0;
+        int res = 0;
+        for (int r = 0; r < nr; ++r)
+        {
+            for (int c = 0; c < nc; ++c)
+            {
+                if (grid[r][c] == 1)
+                {
+                    dfs(grid, r, c, count);
+                    res = max(res, count);
+                    count = 0;
+                }
+            }
+        }
+        return res;
+    }
+};
+```

@@ -1712,3 +1712,273 @@ public:
     }
 };
 ```
+
+### 字符串相乘
+
+给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。
+
+```c++
+/*
+    模拟手工乘法
+*/
+class Solution {
+public:
+    string multiply(string num1, string num2) {
+        if (num1 == "0" || num2 == "0")
+            return "0";
+        
+        int len1 = num1.length();
+        int len2 = num2.length();
+
+        string res(len1 + len2, '0');
+        int len3 = len1 + len2 - 1;
+
+        for (int i = len1 - 1; i >= 0; i--)
+        {
+            for (int j = len2 - 1; j >= 0; j--)
+            {
+                int t = (num1[i] - '0') * (num2[j] - '0') + res[len3] - '0';
+                res[len3] = t % 10 + '0';
+                len3--;
+                res[len3] = res[len3] + t / 10;
+            }
+            len3 = (len1 + len2 - 1) - len1 + i;
+        }
+        if (res[0] == '0')
+            res.erase(0, 1);
+        return res;
+    }
+};
+```
+
+### 翻转字符串里的单词
+
+给定一个字符串，逐个翻转字符串中的每个单词。
+
+```c++
+class Solution {
+public:
+    string reverseWords(string s) {
+        
+        stack<string> stackStr;
+        string str;
+        for (int i = 0; i < s.length(); i++)
+        {
+            if (s[i] != ' ')
+            {
+                str = str + s[i];
+            }
+            else if (str.length() > 0)
+            {
+                stackStr.push(str);
+                str.clear();
+            }
+        }
+        if (str.length() > 0)
+            stackStr.push(str);
+
+        string res;
+        while (!stackStr.empty())
+        {
+            res = res + stackStr.top() + " ";
+            stackStr.pop();
+        }
+        if (res.length() > 0)
+            res.erase(res.length()-1, 1);
+        return res;
+    }
+};
+```
+
+### 简化路径
+
+以 Unix 风格给出一个文件的绝对路径，你需要简化它。或者换句话说，将其转换为规范路径。
+
+在 Unix 风格的文件系统中，一个点（.）表示当前目录本身；此外，两个点 （..） 表示将目录切换到上一级（指向父目录）；两者都可以是复杂相对路径的组成部分。更多信息请参阅：Linux / Unix中的绝对路径 vs 相对路径
+
+请注意，返回的规范路径必须始终以斜杠 / 开头，并且两个目录名之间必须只有一个斜杠 /。最后一个目录名（如果存在）不能以 / 结尾。此外，规范路径必须是表示绝对路径的最短字符串。
+
+```c++
+/* 用一个栈存放目录名 */
+class Solution {
+public:
+    string simplifyPath(string path) {
+        path = path + '/';
+        vector<string> vecStr;
+        string str;
+        string dot;
+        for (char c : path)
+        {
+            if (c != '/' && c != '.')
+            {
+                str = str + c;
+            }
+            else if (c == '/')
+            {
+                if (!str.empty())
+                {
+                    if (!dot.empty())
+                        str = dot + str;
+                    vecStr.push_back(str);
+                    str.clear();
+                }
+                else if (dot == ".." && !vecStr.empty())
+                {
+                    vecStr.pop_back();
+                }
+                else if (dot.length() > 2)
+                {
+                    vecStr.push_back(dot);
+                }
+
+                dot.clear();
+            }
+            else if (c == '.')
+            {
+                dot = dot + c;
+            }
+        }
+
+        str = string("/");
+        for (int i = 0; i < vecStr.size(); i++)
+        {
+            str = str + vecStr[i] + string("/");
+        }
+
+        if (str.length() > 1)
+            str.erase(str.length() - 1, 1);
+
+        return str;
+    }
+};
+```
+
+### 最长连续递增序列
+
+给定一个未经排序的整数数组，找到最长且连续的的递增序列。
+
+```c++
+class Solution {
+public:
+    int findLengthOfLCIS(vector<int>& nums) {
+        if (nums.size() == 0)
+            return 0;
+        int res = 0, count = 0;
+        for (int i = 0; i < nums.size() - 1; i++)
+        {
+            if (nums[i] < nums[i + 1])
+            {
+                cout << count << endl;
+                count++;
+            }
+            else
+            {
+                res = max(res, count);
+                count = 0;
+            }
+        }
+        res = max(res, count) + 1;
+        return res;
+    }
+};
+```
+
+### 合并两个有序链表
+
+将两个有序链表合并为一个新的有序链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。
+
+```c++
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        ListNode *head;
+        if (l1 == NULL && l2 == NULL)
+            return NULL;
+        
+        if ((l1 && l2 && l1->val <= l2->val) || (l2 == NULL && l1))
+        {
+            head = l1;
+            l1 = l1->next;
+        }
+        else
+        {
+            head = l2;
+            l2 = l2->next;
+        }
+        
+        ListNode *res = head;
+        while(l1 || l2)
+        {
+            if ((l1 && l2 && l1->val <= l2->val) || (l2 == NULL && l1))
+            {
+                res->next = l1;
+                l1 = l1->next;
+            }
+            else
+            {
+                res->next = l2;
+                l2 = l2->next;
+            }
+            res = res->next;
+        }
+        return head;
+    }
+};
+```
+
+### 两数相加
+
+给出两个 非空 的链表用来表示两个非负的整数。其中，它们各自的位数是按照 逆序 的方式存储的，并且它们的每个节点只能存储 一位 数字。  
+如果，我们将这两个数相加起来，则会返回一个新的链表来表示它们的和。  
+您可以假设除了数字 0 之外，这两个数都不会以 0 开头。  
+
+```c++
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode *head = new ListNode(0);
+        ListNode *node = head;
+        int flag = 0;
+        
+        while(l1 || l2)
+        {
+            int sum = 0;
+            if (l1 && l2)
+            {
+                sum = l1->val + l2->val + flag;
+                l2 = l2->next;
+                l1 = l1->next;
+            }
+            else if (l1)
+            {
+                sum = l1->val + flag;
+                l1 = l1->next;
+            }
+            else if(l2)
+            {
+                sum = l2->val + flag;
+                l2 = l2->next;
+            }
+           
+            if (sum >= 10)
+            {
+                node->val = sum%10;
+                flag = 1;
+            }
+            else
+            {
+                node->val = sum;
+                flag = 0;
+            }
+            
+            if (l1 || l2 || flag == 1)
+            {
+                node->next = new ListNode(0);
+                node = node->next;
+                node->val = 1;
+            }
+        }
+        return head;
+    }
+};
+```
