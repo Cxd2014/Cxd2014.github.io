@@ -1973,9 +1973,47 @@ public:
             
             if (l1 || l2 || flag == 1)
             {
-                node->next = new ListNode(0);
+                node->next = new ListNode(1);
                 node = node->next;
-                node->val = 1;
+            }
+        }
+        return head;
+    }
+};
+```
+
+### 合并K个排序链表
+
+合并 k 个排序链表，返回合并后的排序链表。请分析和描述算法的复杂度。
+
+```c++
+/* 遍历所有链表的数据到multimap，然后遍历一遍multimap */
+class Solution {
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        ListNode *head = NULL;
+        multimap<int, ListNode*> mapValue;
+        for (int i = 0; i < lists.size(); i++)
+        {
+            ListNode *node = lists[i];
+            while(node)
+            {
+                mapValue.insert(pair(node->val, node));
+                node = node->next;
+            }
+        }
+        if (mapValue.size() >= 1)
+        {
+            head = mapValue.begin()->second;
+            ListNode *node = head;
+            for (multimap<int, ListNode*>::iterator iter = mapValue.begin(); iter != mapValue.end(); )
+            {
+                iter++;
+                if (iter != mapValue.end())
+                {
+                    node->next = iter->second;
+                    node = node->next;
+                }
             }
         }
         return head;

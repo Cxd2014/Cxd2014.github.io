@@ -557,3 +557,121 @@ public:
     }
 };
 ```
+
+### 全 O(1) 的数据结构
+
+实现一个数据结构支持以下操作：  
+Inc(key) - 插入一个新的值为 1 的 key。或者使一个存在的 key 增加一，保证 key 不为空字符串。  
+Dec(key) - 如果这个 key 的值是 1，那么把他从数据结构中移除掉。否者使一个存在的 key 值减一。如果这个 key 不存在，这个函数不做任何事情。key 保证不为空字符串。  
+GetMaxKey() - 返回 key 中值最大的任意一个。如果没有元素存在，返回一个空字符串""。  
+GetMinKey() - 返回 key 中值最小的任意一个。如果没有元素存在，返回一个空字符串""。  
+挑战：以 O(1) 的时间复杂度实现所有操作。  
+
+```c++
+/*
+思路关键是数据结构的设置，用双向链表存放数据，并且将值相同的key存放到同一个List节点下，用map索引List的节点位置
+*/
+class AllOne {
+public:
+    list<pair<int, set<string>>> DoubleList;
+    unordered_map<string, list<pair<int, set<string>>>::iterator> hashMap;
+    /** Initialize your data structure here. */
+    AllOne() {
+    }
+    /** Inserts a new key <Key> with value 1. Or increments an existing key by 1. */
+    void inc(string key) {
+        auto iter = hashMap.find(key);
+        if (iter != hashMap.end())
+        {
+            int count = iter->second->first + 1;
+            iter->second->second.erase(key);
+            auto ListIter = iter->second;
+            iter->second++;
+            if (iter->second != DoubleList.end() && iter->second->first == count)
+            {
+                iter->second->second.insert(key);
+                hashMap[key] = iter->second;
+            }
+            else
+            {
+                set<string> setStr;
+                setStr.insert(key);
+                hashMap[key] = DoubleList.insert(iter->second, make_pair(count, setStr));
+            }
+            if (ListIter->second.size() == 0)
+                DoubleList.erase(ListIter);
+        }
+        else
+        {
+            auto iter = DoubleList.begin();
+            if (iter != DoubleList.end() && iter->first == 1)
+            {
+                iter->second.insert(key);   
+                hashMap[key] = DoubleList.begin();
+            }
+            else
+            {
+                set<string> setStr;
+                setStr.insert(key);
+                DoubleList.push_front(make_pair(1, setStr));
+                hashMap[key] = DoubleList.begin();
+            }
+        }
+    }
+    /** Decrements an existing key by 1. If Key's value is 1, remove it from the data structure. */
+    void dec(string key) {
+        auto iter = hashMap.find(key);
+        if (iter != hashMap.end())
+        {
+            auto ListIter = iter->second;
+            int count = iter->second->first - 1;
+            if (iter->second == DoubleList.begin())
+            {
+                if (iter->second->first == 1)
+                {
+                    iter->second->second.erase(key);
+                    hashMap.erase(key);
+                }
+                else
+                {
+                    set<string> setStr;
+                    setStr.insert(key);
+                    DoubleList.push_front(make_pair(count, setStr));
+                    hashMap[key] = DoubleList.begin();
+                }
+            }
+            else
+            {
+                iter->second->second.erase(key);
+                iter->second--;
+                if (iter->second->first == count)
+                {
+                    iter->second->second.insert(key);
+                    hashMap[key] = iter->second;
+                }
+                else
+                {
+                    set<string> setStr;
+                    setStr.insert(key);
+                    hashMap[key] = DoubleList.insert(ListIter, make_pair(count, setStr));
+                } 
+            }
+            if (ListIter->second.size() == 0)
+                DoubleList.erase(ListIter);
+        }
+    }
+    /** Returns one of the keys with maximal value. */
+    string getMaxKey() {
+        if (DoubleList.size() > 0)
+            return *(DoubleList.back().second.begin());
+        return "";
+    }
+    /** Returns one of the keys with Minimal value. */
+    string getMinKey() {
+        if (DoubleList.size() > 0)
+            return *(DoubleList.begin()->second.begin());
+        return "";
+    }
+};
+```
+
