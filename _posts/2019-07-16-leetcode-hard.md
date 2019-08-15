@@ -675,3 +675,65 @@ public:
 };
 ```
 
+### 买卖股票的最佳时机
+
+给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。  
+如果你最多只允许完成一笔交易（即买入和卖出一支股票），设计一个算法来计算你所能获取的最大利润。  
+注意你不能在买入股票前卖出股票。  
+
+```c++
+/* 动态规划问题，计算波峰到波谷的最大高度差 */
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int last = 0, profit = 0;
+        for (int i = 0; i < prices.size() - 1; ++i) {
+            last = max(0, last + prices[i+1] - prices[i]);
+            profit = max(profit, last);
+        }
+        return profit;
+    }
+};
+```
+
+### 买卖股票的最佳时机 II
+
+给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。  
+设计一个算法来计算你所能获取的最大利润。你可以尽可能地完成更多的交易（多次买卖一支股票）。  
+注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。  
+
+```c++
+/* 动态规划问题，只要是上升时期都加起来 */
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int res = 0;
+        for (int i = 1; i < prices.size(); ++i) {
+            if (prices[i] > prices[i - 1])
+                res = res + (prices[i] - prices[i - 1]);
+        }
+        return res;
+    }
+};
+```
+
+### 最大子序和
+
+给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+
+```c++
+/* 动态规划问题，dp[i] = max(nums[i], dp[i - 1] + nums[i]) */
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int res = INT_MIN;
+        int sum = -1;
+        for(int i = 0; i < nums.size(); ++i)
+        {
+            sum = max(nums[i], sum + nums[i]);
+            res = max(sum, res);
+        }
+        return res;
+    }
+};
+```
