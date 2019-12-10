@@ -47,6 +47,8 @@ N | 查找上一个'text'字符串
 Shift键 + : | 进入尾行模式（在命令行模式下）
 :wq | 保存并退出
 :q! | 不保存并退出
+set enc=utf8 | 设置编码为utf8
+
 
 ### grep命令
 
@@ -85,10 +87,17 @@ Shift键 + : | 进入尾行模式（在命令行模式下）
     ```
     sed -i s/LOGDEBUG/LOGDEBUG_CXD/g `grep LOGDEBUG -rl --include="*.cpp" ./`
     ```
+
 7. 批量将文件后缀为".cc"修改为".cpp"
 
     ```
     rename 's/\.cc/\.cpp/' * `find . -name "*.cc"`
+    ```
+
+8. 查找文本文件并显示命中字符的上一行和下一行
+
+    ```
+    grep -rnI 'main' ./ -C 1
     ```
 
 ### tcpdump命令
@@ -103,7 +112,8 @@ Shift键 + : | 进入尾行模式（在命令行模式下）
 `tcpdump -i eth3 udp port 1111` | 抓取UDP协议并指定端口号
 `tcpdump -i eth3 udp -c 10` | 抓取10个UDP协议的数据包
 `tcpdump -i eth3 udp -w ./data.cap` | 抓取UDP协议数据并输出为Wireshark格式的文件  
-`tcpdump -nn -i eth1 -Xps0 udp and host 10.100.73.38` 显示包的所有数据
+`tcpdump -nn -i eth1 -Xps0 udp and host 10.100.73.38` | 显示包的所有数据
+`tcpreplay -i eth1 -l 100 -p 1 huifang.pcap` | 回放包
 
 注：按`ctrl + c`结束抓取数据包，并保存数据
 
@@ -121,10 +131,11 @@ ifconfig eth3 hw ether 00:AA:BB:CC:dd:EE | 修改MAC地址
 
 命令|解释
 ---|---
-du -ah --max-depth=1 | sort -rn   | 查看目录占有空间并排序
+du -ah --max-depth=1 \| sort -rn   | 查看目录占有空间并排序
 df -h | 查看磁盘使用情况
 ps -p 3201 -o lstart,etime | 查看指定进程启动时间和运行时间
 lsof -p 27432 | 查看进程打开的描述符
-
-
-
+nm -lC main | 查看符号并显示该符号在文件中的位置
+ar -t libcomm_oi.a | 查看静态库中包含的文件
+ldd main | 查看程序需要的共享库
+split -l 5 main.cpp -d -a 2 sp_ | 按行分割文件并按数字顺序命名
