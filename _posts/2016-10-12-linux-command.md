@@ -135,6 +135,9 @@ du -ah --max-depth=1 \| sort -rn   | 查看目录占有空间并排序
 df -h | 查看磁盘使用情况
 ps -p 3201 -o lstart,etime | 查看指定进程启动时间和运行时间
 lsof -p 27432 | 查看进程打开的描述符
+losf -a fielname | 查看文件fielname被哪些进程打开 
+losf -i udp | 查看所有打开的UDP套接字
+lsof -i :49873 | 查看哪个进程在使用端口号49873
 nm -lC main | 查看符号并显示该符号在文件中的位置
 ar -t libcomm_oi.a | 查看静态库中包含的文件
 ldd main | 查看程序需要的共享库
