@@ -26,7 +26,9 @@ watch expr            |监视 expr变量，（每次运行到变量会打印变�
 print expr            |打印 expr 变量的值，(当前运行函数中的变量)
 c                     |继续运行程序
 next                  |单步运行，跳过函数调用
-step                  |但不运行，进入函数调用
+ni                    |单条指令运行
+i register rax        |查看寄存器的值
+step                  |单步运行，进入函数调用
 help name             |查看name命令的帮助信息
 quit                  |退出调试
 
@@ -34,6 +36,7 @@ quit                  |退出调试
 1. 需要调试的程序在编译的时候要加 -g 选项，程序才能进行调试
 2. 以上所有命令都可以简写首字母，例：`info break` ==> `i b` 除特殊声明外
 3. gdb --args app args 传递参数给调试程序。app是需要调试的程序 args为传递的参数，可以有多个参数  
+4. 其他高级用法参考[100个gdb小技巧](https://wizardforcel.gitbooks.io/100-gdb-tips/index.html)
 
 ---
 
