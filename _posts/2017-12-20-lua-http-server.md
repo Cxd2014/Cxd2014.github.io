@@ -49,8 +49,10 @@ Lua钩子函数处理请求之后的返回数据通过调用`task:replay(replay)
 
 而epoll克服了上述所有缺陷，他没有最大数量的限制，它是通过一个专门的函数接口来增加或者删除你需要监听的句柄，所以不必每次都全部下发一边，并且它接收到事件返回的时候也只是将当前就绪的句柄返回给用户空间而不是所有句柄。其中epoll中需要关注的一点是它的两种模式：LT模式与ET模式，它们之间的区别是：
 
-* LT模式，当`epoll_wait`检测到描述符事件发生并将此事件通知应用程序，应用程序可以不立即处理该事件。下次调用`epoll_wait`时，会再次响应应用程序并通知此事件。
-* ET模式，当`epoll_wait`检测到描述符事件发生并将此事件通知应用程序，应用程序必须立即处理该事件。如果不处理，下次调用`epoll_wait`时，不会再次响应应用程序并通知此事件。
+* LT模式，水平触发，只要条件保持就会触发。
+* ET模式，边沿触发，只有新事件到来才会触发。
+
+例如，一个`pipe`在`epoll`上注册接收数据事件，当有数据到来时`epoll_wait`返回，此时当我们从缓冲区只读取一部分数据时，如果是`水平触发`模式，下次调用`epoll_wait`时会立即返回，直到所有数据都被读取完。如果是`边沿触发`模式，`epoll_wait`只会在有新数据再次到来时才会返回。翻译：[wiki epoll](https://en.wikipedia.org/wiki/Epoll)
 
 这两种区别在内核中的实现参考这篇文章：[Linux内核epoll ET/LT辨析](http://www.pandademo.com/2016/11/the-discrimination-of-linux-kernel-epoll-et-and-lt/)    
 `select`在内核中的实现参考这篇文章：[Linux内核select源码剖析](http://www.pandademo.com/2016/11/linux-kernel-select-source-dissect/)   
