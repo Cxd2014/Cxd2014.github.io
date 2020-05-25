@@ -96,6 +96,13 @@
       title: '柬埔寨旅拍短片',
       core_tech: 'vlog',
       description: '旅拍'
+    },{
+      demo_link: 'https://www.bilibili.com/video/BV1cE411o772',
+      img_link: '/css/20200525.jpg',
+      //code_link: 'http://v.youku.com/v_show/id_XOTE2OTM3NTc2.html',
+      title: '内蒙古旅拍短片',
+      core_tech: 'vlog',
+      description: '旅拍'
     }
   ];
 
