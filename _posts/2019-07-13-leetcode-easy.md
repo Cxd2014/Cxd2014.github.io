@@ -2061,3 +2061,316 @@ public:
     }
 };
 ```
+
+### 两数之和
+
+给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。你可以假设每种输入只会对应一个答案。但是，数组中同一个元素不能使用两遍。
+
+```golang
+func twoSum(nums []int, target int) []int {
+    mapValues := make(map[int]int)
+    result := make([]int, 2)
+    
+    for i, v := range nums {
+         if j, ok := mapValues[v]; ok {
+             if target - v == v {
+                result[0] = i
+                result[1] = j
+                return result
+             }
+         } else {
+            mapValues[v] = i 
+         }
+    }
+    
+    for i, v := range nums {
+        if j, ok := mapValues[target - v]; ok {
+            if i != j {
+                result[0] = i
+                result[1] = j
+                return result
+            }
+        }
+    }
+    
+    return result
+}
+```
+
+### 三数之和
+
+给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有满足条件且不重复的三元组。注意：答案中不可以包含重复的三元组。
+
+```golang
+// 排序加双指针
+func threeSum(nums []int) [][]int {
+    sort.Ints(nums) // 排序
+    var result [][]int
+  
+    length := len(nums)
+    for i := 0; i < length - 2; i++ {
+        left := i+1
+        right := length - 1
+        target := 0 - nums[i]
+        if i > 0 && nums[i] == nums[i-1] {
+            continue // 跳过重复元素
+        }
+
+        for left < right {
+            if nums[left] + nums[right] == target {
+                
+                res := make([]int, 3)
+                res[0] = nums[i]
+                res[1] = nums[left]
+                res[2] = nums[right]
+                result = append(result,res)
+                
+                for (left < right) && (nums[left] == nums[left+1]) {
+                    left++ // 跳过重复元素
+                }
+                for (left < right) && (nums[right] == nums[right-1]) {
+                    right-- // 跳过重复元素
+                }
+                
+                left++
+                right--
+            } else if nums[left] + nums[right] < target {
+                left++
+            } else {
+                right--
+            }
+        }
+    }
+    
+    return result
+}
+```
+
+### 有效的括号
+
+给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串，判断字符串是否有效。
+
+有效字符串需满足：  
+左括号必须用相同类型的右括号闭合。  
+左括号必须以正确的顺序闭合。  
+注意空字符串可被认为是有效字符串。  
+
+```c++
+class Solution {
+public:
+    bool isValid(string s) {
+        vector<char> vecChar;
+        
+        for (char c : s) {
+            if ((vecChar.size() > 0) && 
+                ((vecChar[vecChar.size() - 1] == '(' && c == ')') || 
+                 (vecChar[vecChar.size() - 1] == '{' && c == '}') || 
+                 (vecChar[vecChar.size() - 1] == '[' && c == ']'))) {
+                    vecChar.pop_back();
+                }
+            else
+                vecChar.push_back(c);
+        }
+        
+        if (vecChar.size() == 0)
+            return true;
+        else
+            return false;
+    }
+};
+```
+
+### 删除排序数组中的重复项
+
+给定一个排序数组，你需要在 原地 删除重复出现的元素，使得每个元素只出现一次，返回移除后数组的新长度。
+不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
+
+```go
+// 双指针解法
+func removeDuplicates(nums []int) int {
+   var count int = 0
+	for i := 0; i < len(nums); i++ {
+		if nums[count] != nums[i] {
+			count++
+			nums[count] = nums[i]
+		}
+	}
+	return count + 1
+}
+```
+
+### 盛最多水的容器
+
+给你 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0)。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
+
+```go
+// 双指针解法
+func min(x, y int) int {
+	if x < y {
+		return x
+	}
+	return y
+}
+
+func maxArea(height []int) int {
+    var result int = math.MinInt32
+
+	left := 0
+	right := len(height) - 1
+	for left < right {
+		t := min(height[left], height[right]) * (right - left)
+		if t > result {
+			result = t
+		}
+		if height[left] > height[right] {
+			right--
+		} else {
+			left++
+		}
+	}
+	return result
+}
+```
+
+### 反转字符串中的单词 III
+
+给定一个字符串，你需要反转字符串中每个单词的字符顺序，同时仍保留空格和单词的初始顺序。
+
+示例 1:  
+输入: "Let's take LeetCode contest"  
+输出: "s'teL ekat edoCteeL tsetnoc" 
+
+```go
+func Reverse(s string) string {
+	r := []rune(s)
+	for i, j := 0, len(r)-1; i < j; i, j = i+1, j-1 {
+		r[i], r[j] = r[j], r[i]
+	}
+	return string(r)
+}
+
+func reverseWords(s string) string {
+	var result string
+	items := strings.Split(s, " ")
+	for _, i := range items {
+		result = result + Reverse(i) + " "
+	}
+	return strings.TrimRight(result, " ")
+}
+```
+
+### 旋转链表
+
+给定一个链表，旋转链表，将链表每个节点向右移动 k 个位置，其中 k 是非负数。
+
+示例 1:  
+输入: 1->2->3->4->5->NULL, k = 2  
+输出: 4->5->1->2->3->NULL  
+解释:  
+向右旋转 1 步: 5->1->2->3->4->NULL  
+向右旋转 2 步: 4->5->1->2->3->NULL  
+
+```go
+/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ * 双指针法
+ */
+func rotateRight(head *ListNode, k int) *ListNode {
+    if head == nil {
+        return head
+    }
+    
+    var node *ListNode = head
+    var left *ListNode = head
+    var right *ListNode = head
+    
+    var count int = 0
+    for node != nil {    // 计算链表长度
+        node = node.Next
+        count++
+    }
+    
+    k = k % count // 计算最小移动次数
+    if count == 1 || k == 0 { // 不需要移动
+        return head
+    }
+    
+    for i := 0; i < k; i++ { // 计算位置K的节点
+        right = right.Next
+    }
+    
+    for right.Next != nil { // 从位置K开始移动到链表末尾
+        left = left.Next
+        right = right.Next
+    }
+    
+    right.Next = head // 将left到right这段截断，放在链表头部
+    head = left.Next
+    left.Next = nil
+    return head
+}
+```
+
+### 整数反转
+
+给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。  
+假设我们的环境只能存储得下 32 位的有符号整数，则其数值范围为 [−2^31,  2^31 − 1]。请根据这个假设，如果反转后整数溢出那么就返回 0。
+
+```go
+func reverse(x int) int {
+    var result int
+	for x != 0 {
+		result = result * 10 + x % 10
+		x = x / 10
+    }
+    
+    if result > math.MaxInt32 || result < math.MinInt32 {
+            result = 0
+    }
+	return result
+}
+```
+
+### 回文数
+
+判断一个整数是否是回文数。回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。
+
+```go
+func isPalindrome(x int) bool {
+    if x < 0 {
+        return false
+    }
+        
+    y := x
+    var result int
+	for x != 0 { // 整数反转
+		result = result * 10 + x % 10
+		x = x / 10
+    }
+    
+    if result == y {
+        return true
+    }
+    return false
+}
+```
+
+### 2的幂
+
+给定一个整数，编写一个函数来判断它是否是 2 的幂次方。
+
+```go
+// 如果 n 为 2 的幂则满足 n & (n - 1) == 0
+func isPowerOfTwo(n int) bool {
+    if n > 0 && n & (n - 1) == 0 {
+        return true
+    }
+    return false
+}
+```
+
+
